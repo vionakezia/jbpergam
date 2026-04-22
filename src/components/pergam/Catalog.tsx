@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { products, type GameType, type Status, type Product } from "../../data/products";
+import { useProducts } from "../../hooks/useProducts";
+import type { GameType, Status, Product } from "../../data/products";
 
 type GameFilter = "all" | GameType;
 type StatusFilter = "all" | "Ready" | "Not Available";
@@ -26,6 +27,7 @@ const buildWaLink = (p: Product) => {
 };
 
 export function Catalog({ initialGame = "all" }: Props) {
+  const { products, loading } = useProducts();
   const [game, setGame] = useState<GameFilter>(initialGame);
   const [status, setStatus] = useState<StatusFilter>("all");
   const [sort, setSort] = useState<SortBy>("newest");
@@ -53,7 +55,7 @@ export function Catalog({ initialGame = "all" }: Props) {
     else if (sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
     else list = [...list].sort((a, b) => b.createdAt - a.createdAt);
     return list;
-  }, [game, status, sort, query]);
+  }, [products, game, status, sort, query]);
 
   const games: { v: GameFilter; label: string }[] = [
     { v: "all", label: "All" },
@@ -177,6 +179,16 @@ export function Catalog({ initialGame = "all" }: Props) {
               </a>
             </div>
           </div>
+        ) : loading ? (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="card-surface rounded-2xl p-4 animate-pulse">
+                <div className="aspect-[3/4] rounded-xl bg-muted/40 mb-4" />
+                <div className="h-3 w-1/3 bg-muted/40 rounded mb-2" />
+                <div className="h-4 w-2/3 bg-muted/40 rounded" />
+              </div>
+            ))}
+          </div>
         ) : filtered.length === 0 ? (
           <div className="card-surface rounded-2xl p-16 text-center">
             <div className="text-5xl mb-4">🔍</div>
@@ -186,7 +198,7 @@ export function Catalog({ initialGame = "all" }: Props) {
             </p>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {filtered.map((p, i) => (
               <ProductCard
                 key={p.id}
@@ -201,7 +213,13 @@ export function Catalog({ initialGame = "all" }: Props) {
       </div>
 
       {/* Detail modal */}
-      {detail && <DetailModal product={detail} onClose={() => setDetail(null)} />}
+      {detail && (
+        <DetailModal
+          product={detail}
+          onClose={() => setDetail(null)}
+          onZoom={(src) => setZoomImage({ src, name: detail.name })}
+        />
+      )}
 
       {/* Zoom image modal */}
       {zoomImage && (
@@ -235,16 +253,16 @@ export function Catalog({ initialGame = "all" }: Props) {
 function StatusBadge({ status }: { status: Status }) {
   if (status === "Ready") {
     return (
-      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/20 text-primary-glow border border-primary/40 glow-purple-sm">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary/20 text-primary-glow border border-primary/40 glow-purple-sm">
         <span className="w-1.5 h-1.5 rounded-full bg-primary-glow animate-pulse" />
         Ready
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground border border-border">
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-muted text-muted-foreground border border-border">
       <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground" />
-      Not Available
+      N/A
     </span>
   );
 }
@@ -264,16 +282,18 @@ function ProductCard({
   const hasPackages = !!product.rentalPackages?.length;
   const displayPrice = hasPackages
     ? `Mulai ${formatIDR(product.rentalPackages![0].price)}`
-    : formatIDR(product.price);
+    : product.price > 0
+    ? formatIDR(product.price)
+    : "Hubungi";
 
   return (
     <article
-      className="card-surface rounded-2xl p-5 hover-lift flex flex-col animate-fade-up"
+      className="card-surface rounded-2xl p-3 md:p-4 hover-lift flex flex-col animate-fade-up"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       {/* 3:4 product image */}
-      {product.image && (
-        <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden mb-4 bg-muted">
+      {product.image ? (
+        <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden mb-3 bg-muted">
           <img
             src={product.image}
             alt={product.name}
@@ -283,9 +303,9 @@ function ProductCard({
           <button
             onClick={() => onZoom(product.image!)}
             aria-label="Zoom image"
-            className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-background/80 backdrop-blur-md border border-primary/40 grid place-items-center hover:bg-primary hover:text-primary-foreground transition-all glow-purple-sm"
+            className="absolute bottom-2 right-2 w-8 h-8 md:w-9 md:h-9 rounded-full bg-background/80 backdrop-blur-md border border-primary/40 grid place-items-center hover:bg-primary hover:text-primary-foreground transition-all glow-purple-sm"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="7" />
               <path d="m21 21-4.3-4.3" />
               <line x1="11" y1="8" x2="11" y2="14" />
@@ -293,40 +313,42 @@ function ProductCard({
             </svg>
           </button>
         </div>
+      ) : (
+        <div className="relative w-full aspect-[3/4] rounded-xl mb-3 bg-muted/40 grid place-items-center text-muted-foreground text-3xl">
+          🎮
+        </div>
       )}
 
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <span className="text-xs px-2.5 py-1 rounded-full bg-primary/15 text-primary border border-primary/30">
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/30 truncate">
           {product.game}
         </span>
         <StatusBadge status={product.status} />
       </div>
 
-      <h3 className="font-display font-semibold text-lg leading-snug">
+      <h3 className="font-display font-semibold text-sm md:text-base leading-snug line-clamp-1">
         {product.name}
       </h3>
-      <p className="text-sm text-muted-foreground mt-2 line-clamp-2 flex-1">
+      <p className="text-xs text-muted-foreground mt-1 line-clamp-2 flex-1">
         {product.description}
       </p>
 
-      <div className="mt-5 flex items-end justify-between">
-        <div>
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-            Harga
-          </div>
-          <div className="font-display text-xl font-bold gradient-text">
-            {displayPrice}
-          </div>
+      <div className="mt-3">
+        <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
+          Harga
+        </div>
+        <div className="font-display text-sm md:text-base font-bold gradient-text leading-tight">
+          {displayPrice}
         </div>
       </div>
 
-      <div className="mt-5 grid grid-cols-2 gap-2">
+      <div className="mt-3 grid grid-cols-2 gap-1.5">
         <a
           href={isReady ? buildWaLink(product) : undefined}
           target="_blank"
           rel="noopener noreferrer"
           aria-disabled={!isReady}
-          className={`text-center text-sm font-semibold py-2.5 rounded-full transition-all ${
+          className={`text-center text-xs font-semibold py-2 rounded-full transition-all ${
             isReady
               ? "bg-primary text-primary-foreground hover:glow-purple-sm"
               : "bg-muted text-muted-foreground cursor-not-allowed pointer-events-none"
@@ -336,7 +358,7 @@ function ProductCard({
         </a>
         <button
           onClick={onDetail}
-          className="text-sm font-semibold py-2.5 rounded-full border border-primary/40 text-foreground hover:bg-primary/10 hover:border-primary transition-all"
+          className="text-xs font-semibold py-2 rounded-full border border-primary/40 text-foreground hover:bg-primary/10 hover:border-primary transition-all"
         >
           Detail
         </button>
@@ -345,8 +367,20 @@ function ProductCard({
   );
 }
 
-function DetailModal({ product, onClose }: { product: Product; onClose: () => void }) {
+function DetailModal({
+  product,
+  onClose,
+  onZoom,
+}: {
+  product: Product;
+  onClose: () => void;
+  onZoom: (src: string) => void;
+}) {
   const hasPackages = !!product.rentalPackages?.length;
+  const allImages = [
+    ...(product.image ? [product.image] : []),
+    ...(product.gallery ?? []),
+  ];
   return (
     <div
       className="fixed inset-0 z-[60] grid place-items-center p-4 bg-background/80 backdrop-blur-sm animate-fade-up overflow-y-auto"
@@ -370,6 +404,20 @@ function DetailModal({ product, onClose }: { product: Product; onClose: () => vo
         <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
           {product.description}
         </p>
+
+        {allImages.length > 1 && (
+          <div className="mt-4 grid grid-cols-4 gap-2">
+            {allImages.slice(0, 8).map((src, i) => (
+              <button
+                key={i}
+                onClick={() => onZoom(src)}
+                className="aspect-square rounded-lg overflow-hidden border border-border hover:border-primary transition"
+              >
+                <img src={src} alt="" className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+        )}
 
         {hasPackages ? (
           <div className="mt-6">
