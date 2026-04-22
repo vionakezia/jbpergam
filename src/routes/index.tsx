@@ -1,26 +1,46 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { Navbar } from "../components/pergam/Navbar";
+import { Hero } from "../components/pergam/Hero";
+import { Categories } from "../components/pergam/Categories";
+import { Catalog } from "../components/pergam/Catalog";
+import { Faq } from "../components/pergam/Faq";
+import { Contact } from "../components/pergam/Contact";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Pergam Store — Game Account Rental & Stock Marketplace" },
+      {
+        name: "description",
+        content:
+          "Marketplace terpercaya untuk stock akun Free Fire, Mobile Legends, dan rental akun. Cek stock cepat, transaksi aman 24/7.",
+      },
+      { property: "og:title", content: "Pergam Store — Game Marketplace" },
+      {
+        property: "og:description",
+        content: "Stock Free Fire, Mobile Legends & Rental Akun terpercaya.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
+type GameFilter = "all" | "Free Fire" | "Mobile Legends" | "Rental";
 
 function Index() {
-  return <PlaceholderIndex />;
+  const [activeGame, setActiveGame] = useState<GameFilter>("all");
+
+  return (
+    <div className="min-h-screen">
+      <Navbar />
+      <main>
+        <Hero />
+        <Categories onSelect={setActiveGame} />
+        <Catalog initialGame={activeGame} />
+        <Faq />
+        <Contact />
+      </main>
+    </div>
+  );
 }
