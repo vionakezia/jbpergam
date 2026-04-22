@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { products, type GameType, type Status } from "../../data/products";
+import { products, type GameType, type Status, type Product } from "../../data/products";
 
 type GameFilter = "all" | GameType;
 type StatusFilter = "all" | "Ready" | "Not Available";
@@ -9,6 +9,9 @@ interface Props {
   initialGame?: GameFilter;
 }
 
+const WA_NUMBER = "6282142467403";
+const TOPUP_URL = "https://www.pergamshop.com";
+
 const formatIDR = (n: number) =>
   new Intl.NumberFormat("id-ID", {
     style: "currency",
@@ -16,18 +19,26 @@ const formatIDR = (n: number) =>
     maximumFractionDigits: 0,
   }).format(n);
 
+const buildWaLink = (p: Product) => {
+  const action = p.game === "Rental" ? "menyewa" : "membeli";
+  const msg = `Halo, Pergam Store! Saya berminat untuk ${action} ${p.name}. Mohon segera diproses, ya!`;
+  return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+};
+
 export function Catalog({ initialGame = "all" }: Props) {
   const [game, setGame] = useState<GameFilter>(initialGame);
   const [status, setStatus] = useState<StatusFilter>("all");
   const [sort, setSort] = useState<SortBy>("newest");
   const [query, setQuery] = useState("");
-  const [detail, setDetail] = useState<(typeof products)[number] | null>(null);
+  const [detail, setDetail] = useState<Product | null>(null);
+  const [zoomImage, setZoomImage] = useState<{ src: string; name: string } | null>(null);
 
   useEffect(() => {
     setGame(initialGame);
   }, [initialGame]);
 
   const filtered = useMemo(() => {
+    if (game === "Top Up") return [];
     let list = products.filter((p) => {
       if (game !== "all" && p.game !== game) return false;
       if (status !== "all" && p.status !== status) return false;
@@ -49,6 +60,7 @@ export function Catalog({ initialGame = "all" }: Props) {
     { v: "Free Fire", label: "Free Fire" },
     { v: "Mobile Legends", label: "Mobile Legends" },
     { v: "Rental", label: "Rental" },
+    { v: "Top Up", label: "Top Up" },
   ];
 
   const statuses: { v: StatusFilter; label: string }[] = [
@@ -56,11 +68,6 @@ export function Catalog({ initialGame = "all" }: Props) {
     { v: "Ready", label: "Ready Only" },
     { v: "Not Available", label: "Not Available" },
   ];
-
-  const waLink = (p: (typeof products)[number]) =>
-    `https://wa.me/6281234567890?text=${encodeURIComponent(
-      `Halo Pergam Store, saya mau ${p.game === "Rental" ? "sewa" : "beli"}: ${p.name} (${formatIDR(p.price)})`,
-    )}`;
 
   return (
     <section id="catalog" className="relative py-20 md:py-28">
@@ -78,7 +85,6 @@ export function Catalog({ initialGame = "all" }: Props) {
             </p>
           </div>
 
-          {/* Search */}
           <div className="relative w-full md:w-80">
             <input
               type="text"
@@ -145,13 +151,38 @@ export function Catalog({ initialGame = "all" }: Props) {
           </div>
         </div>
 
-        {/* Grid */}
-        {filtered.length === 0 ? (
+        {/* Top Up CTA */}
+        {game === "Top Up" ? (
+          <div className="card-surface rounded-3xl p-10 md:p-16 text-center glow-purple-sm relative overflow-hidden">
+            <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-primary/30 blur-[140px] pointer-events-none" />
+            <div className="relative">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-primary to-primary-glow grid place-items-center text-3xl mb-6 glow-purple-sm">
+                💎
+              </div>
+              <h3 className="font-display text-2xl md:text-4xl font-bold">
+                Top Up Games <span className="gradient-text">Cepat & Aman</span>
+              </h3>
+              <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
+                Layanan top up tersedia langsung di Pergam Shop. Diamond, UC, dan
+                berbagai voucher game lainnya.
+              </p>
+              <a
+                href={TOPUP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-primary text-primary-foreground font-semibold glow-purple hover:-translate-y-0.5 transition-all"
+              >
+                Buka Pergam Shop
+                <span>→</span>
+              </a>
+            </div>
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="card-surface rounded-2xl p-16 text-center">
             <div className="text-5xl mb-4">🔍</div>
-            <h3 className="font-display font-semibold text-xl">Tidak ditemukan</h3>
+            <h3 className="font-display font-semibold text-xl">Belum ada produk</h3>
             <p className="text-muted-foreground mt-2 text-sm">
-              Coba ubah filter atau kata kunci pencarian.
+              Stock untuk kategori ini sedang kosong. Silakan cek kategori lain.
             </p>
           </div>
         ) : (
@@ -162,7 +193,7 @@ export function Catalog({ initialGame = "all" }: Props) {
                 product={p}
                 index={i}
                 onDetail={() => setDetail(p)}
-                waLink={waLink(p)}
+                onZoom={(src) => setZoomImage({ src, name: p.name })}
               />
             ))}
           </div>
@@ -170,50 +201,30 @@ export function Catalog({ initialGame = "all" }: Props) {
       </div>
 
       {/* Detail modal */}
-      {detail && (
+      {detail && <DetailModal product={detail} onClose={() => setDetail(null)} />}
+
+      {/* Zoom image modal */}
+      {zoomImage && (
         <div
-          className="fixed inset-0 z-[60] grid place-items-center p-4 bg-background/80 backdrop-blur-sm animate-fade-up"
-          onClick={() => setDetail(null)}
+          className="fixed inset-0 z-[70] grid place-items-center p-4 bg-background/90 backdrop-blur-md animate-fade-up"
+          onClick={() => setZoomImage(null)}
         >
+          <button
+            onClick={() => setZoomImage(null)}
+            className="absolute top-4 right-4 w-11 h-11 rounded-full bg-card border border-border hover:bg-primary/30 grid place-items-center text-lg z-10"
+            aria-label="Close"
+          >
+            ✕
+          </button>
           <div
-            className="card-surface rounded-3xl max-w-md w-full p-8 relative glow-purple-sm"
+            className="max-w-4xl max-h-[90vh] overflow-auto rounded-2xl glow-purple-sm"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={() => setDetail(null)}
-              className="absolute top-4 right-4 w-9 h-9 rounded-full bg-muted hover:bg-primary/30 grid place-items-center"
-              aria-label="Close"
-            >
-              ✕
-            </button>
-            <span className="text-xs px-2.5 py-1 rounded-full bg-primary/20 text-primary border border-primary/30">
-              {detail.game}
-            </span>
-            <h3 className="font-display text-2xl font-bold mt-4">{detail.name}</h3>
-            <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
-              {detail.description}
-            </p>
-            <div className="mt-6 flex items-center justify-between">
-              <div>
-                <div className="text-xs text-muted-foreground">Harga</div>
-                <div className="font-display text-2xl font-bold gradient-text">
-                  {formatIDR(detail.price)}
-                </div>
-              </div>
-              <StatusBadge status={detail.status} />
-            </div>
-            <a
-              href={waLink(detail)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`mt-6 block w-full text-center py-3 rounded-full font-semibold transition-all ${
-                detail.status === "Ready"
-                  ? "bg-primary text-primary-foreground hover:glow-purple-sm"
-                  : "bg-muted text-muted-foreground cursor-not-allowed pointer-events-none"
-              }`}
-            >
-              {detail.game === "Rental" ? "Sewa Sekarang" : "Beli Sekarang"}
-            </a>
+            <img
+              src={zoomImage.src}
+              alt={zoomImage.name}
+              className="w-full h-auto block"
+            />
           </div>
         </div>
       )}
@@ -242,20 +253,49 @@ function ProductCard({
   product,
   index,
   onDetail,
-  waLink,
+  onZoom,
 }: {
-  product: (typeof products)[number];
+  product: Product;
   index: number;
   onDetail: () => void;
-  waLink: string;
+  onZoom: (src: string) => void;
 }) {
   const isReady = product.status === "Ready";
+  const hasPackages = !!product.rentalPackages?.length;
+  const displayPrice = hasPackages
+    ? `Mulai ${formatIDR(product.rentalPackages![0].price)}`
+    : formatIDR(product.price);
+
   return (
     <article
-      className="card-surface rounded-2xl p-6 hover-lift flex flex-col animate-fade-up"
+      className="card-surface rounded-2xl p-5 hover-lift flex flex-col animate-fade-up"
       style={{ animationDelay: `${index * 50}ms` }}
     >
-      <div className="flex items-start justify-between gap-3 mb-4">
+      {/* 3:4 product image */}
+      {product.image && (
+        <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden mb-4 bg-muted">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+          <button
+            onClick={() => onZoom(product.image!)}
+            aria-label="Zoom image"
+            className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-background/80 backdrop-blur-md border border-primary/40 grid place-items-center hover:bg-primary hover:text-primary-foreground transition-all glow-purple-sm"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m21 21-4.3-4.3" />
+              <line x1="11" y1="8" x2="11" y2="14" />
+              <line x1="8" y1="11" x2="14" y2="11" />
+            </svg>
+          </button>
+        </div>
+      )}
+
+      <div className="flex items-start justify-between gap-3 mb-3">
         <span className="text-xs px-2.5 py-1 rounded-full bg-primary/15 text-primary border border-primary/30">
           {product.game}
         </span>
@@ -275,14 +315,14 @@ function ProductCard({
             Harga
           </div>
           <div className="font-display text-xl font-bold gradient-text">
-            {formatIDR(product.price)}
+            {displayPrice}
           </div>
         </div>
       </div>
 
       <div className="mt-5 grid grid-cols-2 gap-2">
         <a
-          href={isReady ? waLink : undefined}
+          href={isReady ? buildWaLink(product) : undefined}
           target="_blank"
           rel="noopener noreferrer"
           aria-disabled={!isReady}
@@ -302,5 +342,93 @@ function ProductCard({
         </button>
       </div>
     </article>
+  );
+}
+
+function DetailModal({ product, onClose }: { product: Product; onClose: () => void }) {
+  const hasPackages = !!product.rentalPackages?.length;
+  return (
+    <div
+      className="fixed inset-0 z-[60] grid place-items-center p-4 bg-background/80 backdrop-blur-sm animate-fade-up overflow-y-auto"
+      onClick={onClose}
+    >
+      <div
+        className="card-surface rounded-3xl max-w-md w-full p-8 relative glow-purple-sm my-8"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-muted hover:bg-primary/30 grid place-items-center"
+          aria-label="Close"
+        >
+          ✕
+        </button>
+        <span className="text-xs px-2.5 py-1 rounded-full bg-primary/20 text-primary border border-primary/30">
+          {product.game}
+        </span>
+        <h3 className="font-display text-2xl font-bold mt-4">{product.name}</h3>
+        <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
+          {product.description}
+        </p>
+
+        {hasPackages ? (
+          <div className="mt-6">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-xl">✨</span>
+              <h4 className="font-display font-bold text-lg gradient-text">
+                Paket Hemat
+              </h4>
+              <span className="text-xl">✨</span>
+            </div>
+            <div className="space-y-2.5">
+              {product.rentalPackages!.map((pkg) => (
+                <div
+                  key={pkg.duration}
+                  className="flex items-center justify-between px-5 py-3.5 rounded-2xl bg-primary/10 border border-primary/30 hover:border-primary/60 hover:bg-primary/15 transition-all"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-primary/20 grid place-items-center text-sm">
+                      ⏱️
+                    </div>
+                    <span className="font-display font-semibold">
+                      {pkg.duration}
+                    </span>
+                  </div>
+                  <span className="font-display font-bold text-primary-glow">
+                    {formatIDR(pkg.price)}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="text-[11px] text-muted-foreground mt-3 text-center">
+              Hubungi admin untuk pilih paket sesuai kebutuhanmu.
+            </p>
+          </div>
+        ) : (
+          <div className="mt-6 flex items-center justify-between">
+            <div>
+              <div className="text-xs text-muted-foreground">Harga</div>
+              <div className="font-display text-2xl font-bold gradient-text">
+                {product.price > 0 ? formatIDR(product.price) : "Hubungi Admin"}
+              </div>
+            </div>
+            <StatusBadge status={product.status} />
+          </div>
+        )}
+
+        <a
+          href={buildWaLink(product)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`mt-6 block w-full text-center py-3 rounded-full font-semibold transition-all ${
+            product.status === "Ready"
+              ? "bg-primary text-primary-foreground hover:glow-purple-sm"
+              : "bg-muted text-muted-foreground cursor-not-allowed pointer-events-none"
+          }`}
+        >
+          {product.game === "Rental" ? "Sewa Sekarang" : "Beli Sekarang"}
+        </a>
+      </div>
+    </div>
   );
 }

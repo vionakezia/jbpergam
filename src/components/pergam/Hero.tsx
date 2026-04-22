@@ -40,10 +40,10 @@ export function Hero() {
             Lihat Katalog
           </a>
           <a
-            href="#catalog"
+            href="#contact"
             className="px-7 py-3.5 rounded-full border border-primary/40 bg-card/40 backdrop-blur-md font-semibold text-foreground hover:bg-primary/10 hover:border-primary transition-all"
           >
-            Cek Stock Sekarang
+            Hubungi Kami
           </a>
         </div>
 

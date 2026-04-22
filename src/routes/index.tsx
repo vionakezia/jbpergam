@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Navbar } from "../components/pergam/Navbar";
 import { Hero } from "../components/pergam/Hero";
-import { Categories } from "../components/pergam/Categories";
 import { Catalog } from "../components/pergam/Catalog";
 import { Faq } from "../components/pergam/Faq";
 import { Contact } from "../components/pergam/Contact";
@@ -26,17 +25,16 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type GameFilter = "all" | "Free Fire" | "Mobile Legends" | "Rental";
+type GameFilter = "all" | "Free Fire" | "Mobile Legends" | "Rental" | "Top Up";
 
 function Index() {
-  const [activeGame, setActiveGame] = useState<GameFilter>("all");
+  const [activeGame] = useState<GameFilter>("all");
 
   return (
     <div className="min-h-screen">
       <Navbar />
       <main>
         <Hero />
-        <Categories onSelect={setActiveGame} />
         <Catalog initialGame={activeGame} />
         <Faq />
         <Contact />
