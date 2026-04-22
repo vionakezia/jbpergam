@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import type { GameType, Status } from "@/data/products";
+import type { Status } from "@/data/products";
+type AdminGame = "Free Fire" | "Mobile Legends" | "Rental";
 
 interface PackageDraft {
   id?: string;
@@ -27,7 +28,7 @@ export function ProductForm({ productId }: Props) {
   const [error, setError] = useState("");
 
   const [name, setName] = useState("");
-  const [game, setGame] = useState<GameType>("Free Fire");
+  const [game, setGame] = useState<AdminGame>("Free Fire");
   const [price, setPrice] = useState<number>(0);
   const [status, setStatus] = useState<Status>("Ready");
   const [description, setDescription] = useState("");
@@ -54,7 +55,7 @@ export function ProductForm({ productId }: Props) {
       ]);
       if (prod) {
         setName(prod.name);
-        setGame(prod.game as GameType);
+        setGame(prod.game as AdminGame);
         setPrice(prod.price);
         setStatus(prod.status as Status);
         setDescription(prod.description);
@@ -198,7 +199,7 @@ export function ProductForm({ productId }: Props) {
           <Field label="Kategori">
             <select
               value={game}
-              onChange={(e) => setGame(e.target.value as GameType)}
+              onChange={(e) => setGame(e.target.value as AdminGame)}
               className="input"
             >
               <option value="Free Fire">Free Fire</option>
