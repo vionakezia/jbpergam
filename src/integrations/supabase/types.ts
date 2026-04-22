@@ -14,16 +14,150 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      product_images: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          product_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          product_id: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          product_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_images_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          created_at: string
+          description: string
+          game: Database["public"]["Enums"]["game_type"]
+          id: string
+          image_url: string | null
+          name: string
+          price: number
+          sort_order: number
+          status: Database["public"]["Enums"]["product_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          game: Database["public"]["Enums"]["game_type"]
+          id?: string
+          image_url?: string | null
+          name: string
+          price?: number
+          sort_order?: number
+          status?: Database["public"]["Enums"]["product_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          game?: Database["public"]["Enums"]["game_type"]
+          id?: string
+          image_url?: string | null
+          name?: string
+          price?: number
+          sort_order?: number
+          status?: Database["public"]["Enums"]["product_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      rental_packages: {
+        Row: {
+          created_at: string
+          duration: string
+          id: string
+          price: number
+          product_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          duration: string
+          id?: string
+          price: number
+          product_id: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          duration?: string
+          id?: string
+          price?: number
+          product_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rental_packages_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      game_type: "Free Fire" | "Mobile Legends" | "Rental"
+      product_status: "Ready" | "Not Available"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +284,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      game_type: ["Free Fire", "Mobile Legends", "Rental"],
+      product_status: ["Ready", "Not Available"],
+    },
   },
 } as const
