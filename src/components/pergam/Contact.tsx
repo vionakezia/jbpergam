@@ -18,7 +18,7 @@ export function Contact() {
 
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="https://wa.me/6281234567890?text=Halo%20Pergam%20Store%2C%20saya%20mau%20order"
+                href="https://wa.me/6282142467403?text=Halo%2C%20Pergam%20Store!%20Saya%20ingin%20bertanya%20tentang%20produk%20Anda."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-primary text-primary-foreground font-semibold glow-purple hover:animate-pulse-glow transition-all hover:-translate-y-0.5"
@@ -29,7 +29,7 @@ export function Contact() {
                 Chat WhatsApp
               </a>
               <a
-                href="https://instagram.com/pergamstore"
+                href="https://instagram.com/rental.pergamff"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full border border-primary/40 bg-card/40 backdrop-blur-md font-semibold hover:bg-primary/10 hover:border-primary transition-all"

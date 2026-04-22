@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 const links = [
   { href: "#hero", label: "Home" },
-  { href: "#categories", label: "Kategori" },
   { href: "#catalog", label: "Katalog" },
   { href: "#faq", label: "FAQ" },
   { href: "#contact", label: "Kontak" },

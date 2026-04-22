@@ -2,23 +2,23 @@ import { useState } from "react";
 
 const faqs = [
   {
-    q: "How does account rental work?",
+    q: "Bagaimana cara kerja rental akun?",
     a: "Pilih akun yang ingin disewa, lakukan pembayaran, lalu kami kirimkan detail login via WhatsApp. Akun bisa langsung digunakan sesuai durasi sewa.",
   },
   {
-    q: "Is the account safe?",
+    q: "Apakah akunnya aman?",
     a: "Sangat aman. Semua akun terverifikasi, dilengkapi second-email/recovery agar pengguna tidak bisa mengubah data permanen. Garansi penuh selama masa sewa.",
   },
   {
-    q: "How long is rental duration?",
+    q: "Berapa lama durasi rental?",
     a: "Tersedia opsi sewa harian (1 hari) hingga mingguan (7 hari). Durasi dapat diperpanjang kapan saja sebelum waktu habis.",
   },
   {
-    q: "What if there is a problem?",
+    q: "Bagaimana jika terjadi masalah?",
     a: "Tim support kami online 24/7 di WhatsApp & Instagram. Setiap masalah teknis akan dibantu maksimal 15 menit.",
   },
   {
-    q: "Is refund available?",
+    q: "Apakah tersedia refund?",
     a: "Ya. Refund 100% berlaku jika akun tidak bisa diakses karena kesalahan dari pihak kami. Lihat ketentuan lengkap saat checkout.",
   },
 ];
