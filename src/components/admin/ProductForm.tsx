@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import type { Status } from "@/data/products";
 type AdminGame = "Free Fire" | "Mobile Legends" | "Rental";
+type DbGame = "Free Fire" | "Mobile Legends" | "Rental";
 
 interface PackageDraft {
   id?: string;
@@ -112,7 +113,7 @@ export function ProductForm({ productId }: Props) {
         .from("products")
         .update({
           name,
-          game,
+          game: game as DbGame,
           price,
           status,
           description,
@@ -129,7 +130,7 @@ export function ProductForm({ productId }: Props) {
         .from("products")
         .insert({
           name,
-          game,
+          game: game as DbGame,
           price,
           status,
           description,
