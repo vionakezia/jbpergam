@@ -7,7 +7,8 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  cloudflare: false,
   vite: {
-    // Mencoba memaksa adapter vercel jika config pendukungnya mengizinkan
+    // Tambahkan config vite tambahan di sini jika perlu
   }
 });
