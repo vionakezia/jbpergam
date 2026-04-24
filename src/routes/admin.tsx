@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { supabase } from "@/integrations/supabase/client";
 
+const ALLOWED_ADMIN_EMAIL = "ozinpergam29@gmail.com";
+
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
@@ -18,15 +20,16 @@ function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const isLogin = location.pathname === "/admin/login";
+  const isSetup = location.pathname === "/admin/setup";
 
   useEffect(() => {
-    if (loading || isLogin) return;
+    if (loading || isLogin || isSetup) return;
     if (!user) {
       navigate({ to: "/admin/login" });
     }
-  }, [user, loading, navigate, isLogin]);
+  }, [user, loading, navigate, isLogin, isSetup]);
 
-  if (isLogin) return <Outlet />;
+  if (isLogin || isSetup) return <Outlet />;
 
   if (loading) {
     return (
@@ -38,13 +41,16 @@ function AdminLayout() {
 
   if (!user) return null;
 
-  if (isAdmin === false) {
+  const emailAllowed =
+    (user.email ?? "").toLowerCase() === ALLOWED_ADMIN_EMAIL.toLowerCase();
+
+  if (isAdmin === false || !emailAllowed) {
     return (
       <div className="min-h-screen grid place-items-center px-4">
         <div className="card-surface rounded-2xl p-8 max-w-md text-center">
           <h1 className="font-display text-xl font-bold mb-2">Akses Ditolak</h1>
           <p className="text-sm text-muted-foreground mb-4">
-            Akun Anda terdaftar tetapi tidak memiliki role admin.
+            Akun ini tidak memiliki izin untuk mengakses halaman admin.
           </p>
           <button
             onClick={async () => {
