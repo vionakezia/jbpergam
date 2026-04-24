@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import logo from "@/assets/pergam-logo.png";
 
 const links = [
   { href: "#hero", label: "Home" },
@@ -28,9 +29,11 @@ export function Navbar() {
     >
       <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <a href="#hero" className="flex items-center gap-2 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary-glow grid place-items-center glow-purple-sm group-hover:animate-pulse-glow">
-            <span className="font-display font-bold text-primary-foreground">P</span>
-          </div>
+          <img
+            src={logo}
+            alt="Pergam Store"
+            className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/60 glow-purple-sm group-hover:animate-pulse-glow"
+          />
           <span className="font-display font-bold text-lg tracking-tight">
             Pergam<span className="gradient-text">Store</span>
           </span>
