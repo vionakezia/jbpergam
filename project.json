@@ -1,0 +1,31 @@
+{
+  "name": "jbpergam",
+  "description": "Pergam Store - Marketplace Akun Game",
+  "version": "1.0.0",
+  "lastUpdated": "2026-04-24",
+  "stack": {
+    "frontend": "tanstack-start",
+    "backend": "tanstack-start",
+    "database": "supabase",
+    "orm": null,
+    "auth": "supabase-auth",
+    "realtime": null,
+    "mobile": null
+  },
+  "mode": "fullstack",
+  "platform": ["web"],
+  "multiTenant": false,
+  "scale": "small",
+  "team": "solo",
+  "hosting": {
+    "development": "local",
+    "staging": null,
+    "production": "vercel"
+  },
+  "infraBudget": "free-tier",
+  "activeRules": [
+    "nextjs-fullstack",
+    "postgresql"
+  ],
+  "notes": "Migrasi dari Cloudflare ke Vercel. Menggunakan .output directory."
+}
