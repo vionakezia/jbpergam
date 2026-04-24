@@ -18,7 +18,7 @@ export function Contact() {
 
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="https://wa.me/6282142467403?text=Halo%2C%20Pergam%20Store!%20Saya%20ingin%20bertanya%20tentang%20produk%20Anda."
+                href="https://wa.me/6282312715218?text=Halo%2C%20Pergam%20Store!%20Saya%20ingin%20bertanya%20tentang%20produk%20Anda."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-primary text-primary-foreground font-semibold glow-purple hover:animate-pulse-glow transition-all hover:-translate-y-0.5"

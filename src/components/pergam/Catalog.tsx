@@ -10,7 +10,7 @@ interface Props {
   initialGame?: GameFilter;
 }
 
-const WA_NUMBER = "6282142467403";
+const WA_NUMBER = "6282312715218";
 const TOPUP_URL = "https://www.pergamshop.com";
 
 const formatIDR = (n: number) =>
@@ -62,6 +62,7 @@ export function Catalog({ initialGame = "all" }: Props) {
     { v: "Free Fire", label: "Free Fire" },
     { v: "Mobile Legends", label: "Mobile Legends" },
     { v: "Rental", label: "Rental" },
+    { v: "JasaPost", label: "JasaPost" },
     { v: "Top Up", label: "Top Up" },
   ];
 

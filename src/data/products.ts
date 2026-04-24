@@ -1,4 +1,9 @@
-export type GameType = "Free Fire" | "Mobile Legends" | "Rental" | "Top Up";
+export type GameType =
+  | "Free Fire"
+  | "Mobile Legends"
+  | "Rental"
+  | "JasaPost"
+  | "Top Up";
 export type Status = "Ready" | "Not Available";
 
 export interface RentalPackage {
