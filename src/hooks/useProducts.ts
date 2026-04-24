@@ -5,7 +5,7 @@ import type { Product } from "@/data/products";
 interface RawProduct {
   id: string;
   name: string;
-  game: "Free Fire" | "Mobile Legends" | "Rental";
+  game: "Free Fire" | "Mobile Legends" | "Rental" | "JasaPost";
   price: number;
   status: "Ready" | "Not Available";
   description: string;

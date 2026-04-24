@@ -13,6 +13,7 @@ const CATEGORIES: { v: "all" | GameType; label: string; icon: string }[] = [
   { v: "Free Fire", label: "Free Fire", icon: "🔥" },
   { v: "Mobile Legends", label: "Mobile Legends", icon: "⚔️" },
   { v: "Rental", label: "Rental", icon: "🎮" },
+  { v: "JasaPost", label: "JasaPost", icon: "📮" },
 ];
 
 const formatIDR = (n: number) =>

@@ -16,8 +16,8 @@ function AdminSetup() {
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
   const [hasAdmin, setHasAdmin] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email] = useState("ozinpergam29@gmail.com");
+  const [password, setPassword] = useState("Ozin1234");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -109,8 +109,9 @@ function AdminSetup() {
           <div className="text-3xl mb-2">🚀</div>
           <h1 className="font-display text-2xl font-bold">Setup Admin Pertama</h1>
           <p className="text-sm text-muted-foreground mt-2">
-            Buat akun admin pertama untuk mengelola Pergam Store. Halaman ini hanya
-            bisa diakses sekali — setelah ada admin, halaman ini akan terkunci otomatis.
+            Buat akun admin pertama untuk mengelola Pergam Store. Email admin sudah
+            dikunci ke <strong>ozinpergam29@gmail.com</strong>. Halaman ini akan
+            terkunci otomatis setelah admin berhasil dibuat.
           </p>
         </div>
 
@@ -121,9 +122,8 @@ function AdminSetup() {
               type="email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="input mt-1"
-              placeholder="admin@pergam.store"
+              readOnly
+              className="input mt-1 opacity-70 cursor-not-allowed"
             />
           </div>
           <div>

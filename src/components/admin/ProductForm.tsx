@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import type { Status } from "@/data/products";
-type AdminGame = "Free Fire" | "Mobile Legends" | "Rental";
-type DbGame = "Free Fire" | "Mobile Legends" | "Rental";
+type AdminGame = "Free Fire" | "Mobile Legends" | "Rental" | "JasaPost";
+type DbGame = "Free Fire" | "Mobile Legends" | "Rental" | "JasaPost";
 
 interface PackageDraft {
   id?: string;
@@ -206,6 +206,7 @@ export function ProductForm({ productId }: Props) {
               <option value="Free Fire">Free Fire</option>
               <option value="Mobile Legends">Mobile Legends</option>
               <option value="Rental">Rental</option>
+              <option value="JasaPost">JasaPost</option>
             </select>
           </Field>
           <Field label="Status">

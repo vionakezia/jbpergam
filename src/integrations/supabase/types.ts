@@ -156,7 +156,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
-      game_type: "Free Fire" | "Mobile Legends" | "Rental"
+      game_type: "Free Fire" | "Mobile Legends" | "Rental" | "JasaPost"
       product_status: "Ready" | "Not Available"
     }
     CompositeTypes: {
@@ -286,7 +286,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
-      game_type: ["Free Fire", "Mobile Legends", "Rental"],
+      game_type: ["Free Fire", "Mobile Legends", "Rental", "JasaPost"],
       product_status: ["Ready", "Not Available"],
     },
   },
