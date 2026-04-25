@@ -256,6 +256,20 @@ export function ProductForm({ productId }: Props) {
             className="input resize-y"
           />
         </Field>
+
+        {game === "Rental" && status === "Not Available" && (
+          <Field label="Estimasi Ready (WIB)">
+            <input
+              type="datetime-local"
+              value={readyEstimate}
+              onChange={(e) => setReadyEstimate(e.target.value)}
+              className="input"
+            />
+            <span className="text-[11px] text-muted-foreground block mt-1">
+              Setelah waktu ini terlewati, status otomatis menjadi Ready di website.
+            </span>
+          </Field>
+        )}
       </div>
 
       <div className="card-surface rounded-2xl p-6 space-y-4">
