@@ -23,4 +23,5 @@ export interface Product {
   image?: string;
   rentalPackages?: RentalPackage[];
   gallery?: string[];
+  readyEstimateAt?: string | null;
 }

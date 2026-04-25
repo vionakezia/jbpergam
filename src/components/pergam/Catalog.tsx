@@ -34,14 +34,35 @@ export function Catalog({ initialGame = "all" }: Props) {
   const [query, setQuery] = useState("");
   const [detail, setDetail] = useState<Product | null>(null);
   const [zoomImage, setZoomImage] = useState<{ src: string; name: string } | null>(null);
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     setGame(initialGame);
   }, [initialGame]);
 
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 30_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const effective = useMemo(
+    () =>
+      products.map((p) => {
+        if (
+          p.status === "Not Available" &&
+          p.readyEstimateAt &&
+          new Date(p.readyEstimateAt).getTime() <= now
+        ) {
+          return { ...p, status: "Ready" as Status };
+        }
+        return p;
+      }),
+    [products, now],
+  );
+
   const filtered = useMemo(() => {
     if (game === "Top Up") return [];
-    let list = products.filter((p) => {
+    let list = effective.filter((p) => {
       if (game !== "all" && p.game !== game) return false;
       if (status !== "all" && p.status !== status) return false;
       if (query.trim()) {
@@ -55,7 +76,7 @@ export function Catalog({ initialGame = "all" }: Props) {
     else if (sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
     else list = [...list].sort((a, b) => b.createdAt - a.createdAt);
     return list;
-  }, [products, game, status, sort, query]);
+  }, [effective, game, status, sort, query]);
 
   const games: { v: GameFilter; label: string }[] = [
     { v: "all", label: "All" },
@@ -288,6 +309,19 @@ function ProductCard({
       ? `Mulai ${formatIDR(product.rentalPackages![0].price)}`
       : "Hubungi";
 
+  const showEstimate =
+    !isReady &&
+    product.game === "Rental" &&
+    !!product.readyEstimateAt &&
+    new Date(product.readyEstimateAt).getTime() > Date.now();
+  const estimateLabel = showEstimate
+    ? new Date(product.readyEstimateAt!).toLocaleTimeString("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "Asia/Jakarta",
+      })
+    : null;
+
   return (
     <article
       className="card-surface rounded-2xl p-3 md:p-4 hover-lift flex flex-col animate-fade-up"
@@ -334,6 +368,13 @@ function ProductCard({
       <p className="text-xs text-muted-foreground mt-1 line-clamp-2 flex-1">
         {product.description}
       </p>
+
+      {showEstimate && (
+        <div className="mt-2 inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 self-start">
+          <span>⏰</span>
+          Estimasi Ready: {estimateLabel} WIB
+        </div>
+      )}
 
       <div className="mt-3">
         <div className="text-[9px] uppercase tracking-wider text-muted-foreground">

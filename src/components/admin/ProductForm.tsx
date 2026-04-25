@@ -37,6 +37,7 @@ export function ProductForm({ productId }: Props) {
   const [gallery, setGallery] = useState<ImageDraft[]>([]);
   const [packages, setPackages] = useState<PackageDraft[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [readyEstimate, setReadyEstimate] = useState<string>("");
 
   useEffect(() => {
     if (!isEdit) return;
@@ -61,6 +62,14 @@ export function ProductForm({ productId }: Props) {
         setStatus(prod.status as Status);
         setDescription(prod.description);
         setMainImage(prod.image_url ?? "");
+        if (prod.ready_estimate_at) {
+          // Convert ISO UTC -> local "YYYY-MM-DDTHH:mm" for datetime-local input
+          const d = new Date(prod.ready_estimate_at);
+          const pad = (n: number) => String(n).padStart(2, "0");
+          setReadyEstimate(
+            `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`,
+          );
+        }
       }
       setGallery((imgs ?? []).map((i) => ({ id: i.id, url: i.image_url })));
       setPackages(
@@ -108,6 +117,10 @@ export function ProductForm({ productId }: Props) {
     setSaving(true);
 
     let pid = productId;
+    const readyEstIso =
+      game === "Rental" && status === "Not Available" && readyEstimate
+        ? new Date(readyEstimate).toISOString()
+        : null;
     if (isEdit) {
       const { error: upErr } = await supabase
         .from("products")
@@ -118,6 +131,7 @@ export function ProductForm({ productId }: Props) {
           status,
           description,
           image_url: mainImage || null,
+          ready_estimate_at: readyEstIso,
         })
         .eq("id", productId);
       if (upErr) {
@@ -135,6 +149,7 @@ export function ProductForm({ productId }: Props) {
           status,
           description,
           image_url: mainImage || null,
+          ready_estimate_at: readyEstIso,
         })
         .select("id")
         .single();
@@ -241,6 +256,20 @@ export function ProductForm({ productId }: Props) {
             className="input resize-y"
           />
         </Field>
+
+        {game === "Rental" && status === "Not Available" && (
+          <Field label="Estimasi Ready (WIB)">
+            <input
+              type="datetime-local"
+              value={readyEstimate}
+              onChange={(e) => setReadyEstimate(e.target.value)}
+              className="input"
+            />
+            <span className="text-[11px] text-muted-foreground block mt-1">
+              Setelah waktu ini terlewati, status otomatis menjadi Ready di website.
+            </span>
+          </Field>
+        )}
       </div>
 
       <div className="card-surface rounded-2xl p-6 space-y-4">
