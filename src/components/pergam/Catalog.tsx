@@ -34,14 +34,35 @@ export function Catalog({ initialGame = "all" }: Props) {
   const [query, setQuery] = useState("");
   const [detail, setDetail] = useState<Product | null>(null);
   const [zoomImage, setZoomImage] = useState<{ src: string; name: string } | null>(null);
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     setGame(initialGame);
   }, [initialGame]);
 
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 30_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const effective = useMemo(
+    () =>
+      products.map((p) => {
+        if (
+          p.status === "Not Available" &&
+          p.readyEstimateAt &&
+          new Date(p.readyEstimateAt).getTime() <= now
+        ) {
+          return { ...p, status: "Ready" as Status };
+        }
+        return p;
+      }),
+    [products, now],
+  );
+
   const filtered = useMemo(() => {
     if (game === "Top Up") return [];
-    let list = products.filter((p) => {
+    let list = effective.filter((p) => {
       if (game !== "all" && p.game !== game) return false;
       if (status !== "all" && p.status !== status) return false;
       if (query.trim()) {
@@ -55,7 +76,7 @@ export function Catalog({ initialGame = "all" }: Props) {
     else if (sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
     else list = [...list].sort((a, b) => b.createdAt - a.createdAt);
     return list;
-  }, [products, game, status, sort, query]);
+  }, [effective, game, status, sort, query]);
 
   const games: { v: GameFilter; label: string }[] = [
     { v: "all", label: "All" },
