@@ -55,6 +55,7 @@ export type Database = {
           image_url: string | null
           name: string
           price: number
+          ready_estimate_at: string | null
           sort_order: number
           status: Database["public"]["Enums"]["product_status"]
           updated_at: string
@@ -67,6 +68,7 @@ export type Database = {
           image_url?: string | null
           name: string
           price?: number
+          ready_estimate_at?: string | null
           sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
           updated_at?: string
@@ -79,6 +81,7 @@ export type Database = {
           image_url?: string | null
           name?: string
           price?: number
+          ready_estimate_at?: string | null
           sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
           updated_at?: string
