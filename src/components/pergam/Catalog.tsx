@@ -315,11 +315,20 @@ function ProductCard({
     !!product.readyEstimateAt &&
     new Date(product.readyEstimateAt).getTime() > Date.now();
   const estimateLabel = showEstimate
-    ? new Date(product.readyEstimateAt!).toLocaleTimeString("id-ID", {
-        hour: "2-digit",
-        minute: "2-digit",
-        timeZone: "Asia/Jakarta",
-      })
+    ? (() => {
+        const d = new Date(product.readyEstimateAt!);
+        const date = d.toLocaleDateString("id-ID", {
+          day: "2-digit",
+          month: "short",
+          timeZone: "Asia/Jakarta",
+        });
+        const time = d.toLocaleTimeString("id-ID", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "Asia/Jakarta",
+        });
+        return `${date} • ${time}`;
+      })()
     : null;
 
   return (
