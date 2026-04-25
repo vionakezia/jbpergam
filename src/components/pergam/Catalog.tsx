@@ -309,6 +309,19 @@ function ProductCard({
       ? `Mulai ${formatIDR(product.rentalPackages![0].price)}`
       : "Hubungi";
 
+  const showEstimate =
+    !isReady &&
+    product.game === "Rental" &&
+    !!product.readyEstimateAt &&
+    new Date(product.readyEstimateAt).getTime() > Date.now();
+  const estimateLabel = showEstimate
+    ? new Date(product.readyEstimateAt!).toLocaleTimeString("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "Asia/Jakarta",
+      })
+    : null;
+
   return (
     <article
       className="card-surface rounded-2xl p-3 md:p-4 hover-lift flex flex-col animate-fade-up"
@@ -355,6 +368,13 @@ function ProductCard({
       <p className="text-xs text-muted-foreground mt-1 line-clamp-2 flex-1">
         {product.description}
       </p>
+
+      {showEstimate && (
+        <div className="mt-2 inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 self-start">
+          <span>⏰</span>
+          Estimasi Ready: {estimateLabel} WIB
+        </div>
+      )}
 
       <div className="mt-3">
         <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
