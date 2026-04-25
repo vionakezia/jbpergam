@@ -17,7 +17,7 @@ function AdminSetup() {
   const [checking, setChecking] = useState(true);
   const [hasAdmin, setHasAdmin] = useState(false);
   const [email] = useState("ozinpergam29@gmail.com");
-  const [password, setPassword] = useState("Ozin1234");
+  const [password, setPassword] = useState("Ozin 1234");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -75,7 +75,7 @@ function AdminSetup() {
           <div className="text-4xl mb-3">✅</div>
           <h1 className="font-display font-bold text-xl">Setup sudah selesai</h1>
           <p className="text-sm text-muted-foreground mt-2">
-            Admin sudah ada di sistem. Halaman setup ini terkunci untuk keamanan.
+            Admin sudah aktif di sistem. Silakan langsung login dengan email admin yang sudah ditentukan. Halaman setup ini terkunci untuk keamanan.
           </p>
           <Link
             to="/admin/login"
