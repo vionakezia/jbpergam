@@ -317,17 +317,17 @@ function ProductCard({
   const estimateLabel = showEstimate
     ? (() => {
         const d = new Date(product.readyEstimateAt!);
-        const date = d.toLocaleDateString("id-ID", {
-          day: "2-digit",
+        const parts = new Intl.DateTimeFormat("id-ID", {
+          day: "numeric",
           month: "short",
-          timeZone: "Asia/Jakarta",
-        });
-        const time = d.toLocaleTimeString("id-ID", {
           hour: "2-digit",
           minute: "2-digit",
+          hour12: false,
           timeZone: "Asia/Jakarta",
-        });
-        return `${date} • ${time}`;
+        }).formatToParts(d);
+        const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
+        const month = get("month").replace(".", "");
+        return `${get("day")} ${month}, ${get("hour")}:${get("minute")}`;
       })()
     : null;
 
@@ -379,9 +379,11 @@ function ProductCard({
       </p>
 
       {showEstimate && (
-        <div className="mt-2 inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 self-start">
-          <span>⏰</span>
-          Estimasi Ready: {estimateLabel} WIB
+        <div className="mt-2 flex items-center gap-1 text-[10px] leading-tight px-2 py-1 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/30 self-start max-w-full">
+          <span className="shrink-0">⏰</span>
+          <span className="whitespace-normal break-words">
+            Estimasi Ready: {estimateLabel} WIB
+          </span>
         </div>
       )}
 
