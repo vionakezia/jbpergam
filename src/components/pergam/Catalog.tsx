@@ -281,11 +281,12 @@ function ProductCard({
 }) {
   const isReady = product.status === "Ready";
   const hasPackages = !!product.rentalPackages?.length;
-  const displayPrice = hasPackages
-    ? `Mulai ${formatIDR(product.rentalPackages![0].price)}`
-    : product.price > 0
-    ? formatIDR(product.price)
-    : "Hubungi";
+  const displayPrice =
+    product.price > 0
+      ? formatIDR(product.price)
+      : hasPackages
+      ? `Mulai ${formatIDR(product.rentalPackages![0].price)}`
+      : "Hubungi";
 
   return (
     <article
