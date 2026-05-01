@@ -2,8 +2,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import type { Status } from "@/data/products";
-type AdminGame = "Free Fire" | "Mobile Legends" | "Rental" | "JasaPost";
-type DbGame = "Free Fire" | "Mobile Legends" | "Rental" | "JasaPost";
+type AdminGame =
+  | "Free Fire"
+  | "Mobile Legends"
+  | "Rental"
+  | "JasaPost"
+  | "Partner Resmi Bang Pergam"
+  | "Paid Promote Bang Pergam";
+type DbGame = AdminGame;
 
 interface PackageDraft {
   id?: string;
@@ -38,6 +44,7 @@ export function ProductForm({ productId }: Props) {
   const [packages, setPackages] = useState<PackageDraft[]>([]);
   const [uploading, setUploading] = useState(false);
   const [readyEstimate, setReadyEstimate] = useState<string>("");
+  const [whatsappNumber, setWhatsappNumber] = useState<string>("");
 
   useEffect(() => {
     if (!isEdit) return;
@@ -62,6 +69,7 @@ export function ProductForm({ productId }: Props) {
         setStatus(prod.status as Status);
         setDescription(prod.description);
         setMainImage(prod.image_url ?? "");
+        setWhatsappNumber((prod as { whatsapp_number?: string | null }).whatsapp_number ?? "");
         if (prod.ready_estimate_at) {
           // Convert ISO UTC -> local "YYYY-MM-DDTHH:mm" for datetime-local input
           const d = new Date(prod.ready_estimate_at);
@@ -121,6 +129,12 @@ export function ProductForm({ productId }: Props) {
       game === "Rental" && status === "Not Available" && readyEstimate
         ? new Date(readyEstimate).toISOString()
         : null;
+    const isPartnerLike =
+      game === "Partner Resmi Bang Pergam" ||
+      game === "Paid Promote Bang Pergam";
+    const waNumberClean = isPartnerLike
+      ? whatsappNumber.replace(/[^0-9]/g, "") || null
+      : null;
     if (isEdit) {
       const { error: upErr } = await supabase
         .from("products")
@@ -132,6 +146,7 @@ export function ProductForm({ productId }: Props) {
           description,
           image_url: mainImage || null,
           ready_estimate_at: readyEstIso,
+          whatsapp_number: waNumberClean,
         })
         .eq("id", productId);
       if (upErr) {
@@ -150,6 +165,7 @@ export function ProductForm({ productId }: Props) {
           description,
           image_url: mainImage || null,
           ready_estimate_at: readyEstIso,
+          whatsapp_number: waNumberClean,
         })
         .select("id")
         .single();
@@ -222,6 +238,8 @@ export function ProductForm({ productId }: Props) {
               <option value="Mobile Legends">Mobile Legends</option>
               <option value="Rental">Rental</option>
               <option value="JasaPost">JasaPost</option>
+              <option value="Partner Resmi Bang Pergam">Partner Resmi Bang Pergam</option>
+              <option value="Paid Promote Bang Pergam">Paid Promote Bang Pergam</option>
             </select>
           </Field>
           <Field label="Status">
@@ -246,6 +264,22 @@ export function ProductForm({ productId }: Props) {
             placeholder="0 jika hanya pakai paket rental"
           />
         </Field>
+
+        {(game === "Partner Resmi Bang Pergam" ||
+          game === "Paid Promote Bang Pergam") && (
+          <Field label="Nomor WhatsApp (CTA)">
+            <input
+              required
+              value={whatsappNumber}
+              onChange={(e) => setWhatsappNumber(e.target.value)}
+              className="input"
+              placeholder="Contoh: 6282312715218"
+            />
+            <span className="text-[11px] text-muted-foreground block mt-1">
+              Tombol WhatsApp pada produk ini akan mengarah ke nomor tersebut. Gunakan format internasional tanpa "+".
+            </span>
+          </Field>
+        )}
 
         <Field label="Deskripsi">
           <textarea
