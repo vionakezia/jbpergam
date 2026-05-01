@@ -3,6 +3,8 @@ export type GameType =
   | "Mobile Legends"
   | "Rental"
   | "JasaPost"
+  | "Partner Resmi Bang Pergam"
+  | "Paid Promote Bang Pergam"
   | "Top Up";
 export type Status = "Ready" | "Not Available";
 
@@ -24,4 +26,5 @@ export interface Product {
   rentalPackages?: RentalPackage[];
   gallery?: string[];
   readyEstimateAt?: string | null;
+  whatsappNumber?: string | null;
 }

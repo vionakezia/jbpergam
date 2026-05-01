@@ -5,7 +5,13 @@ import type { Product } from "@/data/products";
 interface RawProduct {
   id: string;
   name: string;
-  game: "Free Fire" | "Mobile Legends" | "Rental" | "JasaPost";
+  game:
+    | "Free Fire"
+    | "Mobile Legends"
+    | "Rental"
+    | "JasaPost"
+    | "Partner Resmi Bang Pergam"
+    | "Paid Promote Bang Pergam";
   price: number;
   status: "Ready" | "Not Available";
   description: string;
@@ -13,6 +19,7 @@ interface RawProduct {
   sort_order: number;
   created_at: string;
   ready_estimate_at: string | null;
+  whatsapp_number: string | null;
 }
 
 interface RawPackage {
@@ -45,6 +52,7 @@ function buildProducts(
     image: r.image_url ?? undefined,
     createdAt: new Date(r.created_at).getTime(),
     readyEstimateAt: r.ready_estimate_at,
+    whatsappNumber: r.whatsapp_number,
     rentalPackages: pkgs
       .filter((p) => p.product_id === r.id)
       .sort((a, b) => a.sort_order - b.sort_order)

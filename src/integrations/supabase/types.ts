@@ -59,6 +59,7 @@ export type Database = {
           sort_order: number
           status: Database["public"]["Enums"]["product_status"]
           updated_at: string
+          whatsapp_number: string | null
         }
         Insert: {
           created_at?: string
@@ -72,6 +73,7 @@ export type Database = {
           sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
           updated_at?: string
+          whatsapp_number?: string | null
         }
         Update: {
           created_at?: string
@@ -85,6 +87,7 @@ export type Database = {
           sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
           updated_at?: string
+          whatsapp_number?: string | null
         }
         Relationships: []
       }
@@ -159,7 +162,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
-      game_type: "Free Fire" | "Mobile Legends" | "Rental" | "JasaPost"
+      game_type:
+        | "Free Fire"
+        | "Mobile Legends"
+        | "Rental"
+        | "JasaPost"
+        | "Partner Resmi Bang Pergam"
+        | "Paid Promote Bang Pergam"
       product_status: "Ready" | "Not Available"
     }
     CompositeTypes: {
@@ -289,7 +298,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
-      game_type: ["Free Fire", "Mobile Legends", "Rental", "JasaPost"],
+      game_type: [
+        "Free Fire",
+        "Mobile Legends",
+        "Rental",
+        "JasaPost",
+        "Partner Resmi Bang Pergam",
+        "Paid Promote Bang Pergam",
+      ],
       product_status: ["Ready", "Not Available"],
     },
   },

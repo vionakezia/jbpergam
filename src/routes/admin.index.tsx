@@ -14,6 +14,8 @@ const CATEGORIES: { v: "all" | GameType; label: string; icon: string }[] = [
   { v: "Mobile Legends", label: "Mobile Legends", icon: "⚔️" },
   { v: "Rental", label: "Rental", icon: "🎮" },
   { v: "JasaPost", label: "JasaPost", icon: "📮" },
+  { v: "Partner Resmi Bang Pergam", label: "Partner Resmi", icon: "🤝" },
+  { v: "Paid Promote Bang Pergam", label: "Paid Promote", icon: "📣" },
 ];
 
 const formatIDR = (n: number) =>
