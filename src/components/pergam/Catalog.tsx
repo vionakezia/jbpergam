@@ -21,6 +21,16 @@ const formatIDR = (n: number) =>
   }).format(n);
 
 const buildWaLink = (p: Product) => {
+  // Partner / Paid Promote: gunakan nomor WA spesifik produk
+  if (
+    (p.game === "Partner Resmi Bang Pergam" ||
+      p.game === "Paid Promote Bang Pergam") &&
+    p.whatsappNumber
+  ) {
+    const num = p.whatsappNumber.replace(/[^0-9]/g, "");
+    const msg = `Halo, saya tertarik dengan ${p.name} dari Bang Pergam.`;
+    return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+  }
   const action = p.game === "Rental" ? "menyewa" : "membeli";
   const msg = `Halo, Pergam Store! Saya berminat untuk ${action} ${p.name}. Mohon segera diproses, ya!`;
   return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
@@ -84,6 +94,8 @@ export function Catalog({ initialGame = "all" }: Props) {
     { v: "Mobile Legends", label: "Mobile Legends" },
     { v: "Rental", label: "Rental" },
     { v: "JasaPost", label: "JasaPost" },
+    { v: "Partner Resmi Bang Pergam", label: "Partner Resmi Bang Pergam" },
+    { v: "Paid Promote Bang Pergam", label: "Paid Promote Bang Pergam" },
     { v: "Top Up", label: "Top Up" },
   ];
 
