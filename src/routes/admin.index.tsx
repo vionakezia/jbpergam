@@ -71,6 +71,12 @@ function AdminDashboard() {
             👥 Akun Admin
           </Link>
           <Link
+            to="/admin/settings"
+            className="px-4 py-2.5 rounded-full border border-border hover:border-primary/50 text-sm font-medium transition"
+          >
+            ⚙️ Kontak
+          </Link>
+          <Link
             to="/admin/products/new"
             className="px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold glow-purple-sm hover:-translate-y-0.5 transition"
           >

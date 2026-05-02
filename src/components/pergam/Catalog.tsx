@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useProducts } from "../../hooks/useProducts";
+import { useSiteSettings } from "../../hooks/useSiteSettings";
 import type { GameType, Status, Product } from "../../data/products";
 
 type GameFilter = "all" | GameType;
@@ -10,7 +11,6 @@ interface Props {
   initialGame?: GameFilter;
 }
 
-const WA_NUMBER = "6282312715218";
 const TOPUP_URL = "https://www.pergamshop.com";
 
 const formatIDR = (n: number) =>
@@ -20,7 +20,7 @@ const formatIDR = (n: number) =>
     maximumFractionDigits: 0,
   }).format(n);
 
-const buildWaLink = (p: Product) => {
+const buildWaLink = (p: Product, waNumber: string) => {
   // Partner / Paid Promote: gunakan nomor WA spesifik produk
   if (
     (p.game === "Partner Resmi Bang Pergam" ||
@@ -33,11 +33,12 @@ const buildWaLink = (p: Product) => {
   }
   const action = p.game === "Rental" ? "menyewa" : "membeli";
   const msg = `Halo, Pergam Store! Saya berminat untuk ${action} ${p.name}. Mohon segera diproses, ya!`;
-  return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+  return `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
 };
 
 export function Catalog({ initialGame = "all" }: Props) {
   const { products, loading } = useProducts();
+  const { settings } = useSiteSettings();
   const [game, setGame] = useState<GameFilter>(initialGame);
   const [status, setStatus] = useState<StatusFilter>("all");
   const [sort, setSort] = useState<SortBy>("newest");
