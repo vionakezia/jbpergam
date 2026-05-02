@@ -52,11 +52,7 @@ export function ProductForm({ productId }: Props) {
     (async () => {
       const [{ data: prod }, { data: imgs }, { data: pkgs }] = await Promise.all([
         supabase.from("products").select("*").eq("id", productId).single(),
-        supabase
-          .from("product_images")
-          .select("*")
-          .eq("product_id", productId)
-          .order("sort_order"),
+        supabase.from("product_images").select("*").eq("product_id", productId).order("sort_order"),
         supabase
           .from("rental_packages")
           .select("*")
@@ -71,7 +67,9 @@ export function ProductForm({ productId }: Props) {
         setDescription(prod.description);
         setMainImage(prod.image_url ?? "");
         setWhatsappNumber((prod as { whatsapp_number?: string | null }).whatsapp_number ?? "");
-        setWhatsappChannelUrl((prod as { whatsapp_channel_url?: string | null }).whatsapp_channel_url ?? "");
+        setWhatsappChannelUrl(
+          (prod as { whatsapp_channel_url?: string | null }).whatsapp_channel_url ?? "",
+        );
         if (prod.ready_estimate_at) {
           // Convert ISO UTC -> local "YYYY-MM-DDTHH:mm" for datetime-local input
           const d = new Date(prod.ready_estimate_at);
@@ -82,9 +80,7 @@ export function ProductForm({ productId }: Props) {
         }
       }
       setGallery((imgs ?? []).map((i) => ({ id: i.id, url: i.image_url })));
-      setPackages(
-        (pkgs ?? []).map((p) => ({ id: p.id, duration: p.duration, price: p.price })),
-      );
+      setPackages((pkgs ?? []).map((p) => ({ id: p.id, duration: p.duration, price: p.price })));
       setLoading(false);
     })();
   }, [productId, isEdit]);
@@ -132,14 +128,9 @@ export function ProductForm({ productId }: Props) {
         ? new Date(readyEstimate).toISOString()
         : null;
     const isPartnerLike =
-      game === "Partner Resmi Bang Pergam" ||
-      game === "Paid Promote Bang Pergam";
-    const waNumberClean = isPartnerLike
-      ? whatsappNumber.replace(/[^0-9]/g, "") || null
-      : null;
-    const waChannelClean = isPartnerLike
-      ? (whatsappChannelUrl.trim() || null)
-      : null;
+      game === "Partner Resmi Bang Pergam" || game === "Paid Promote Bang Pergam";
+    const waNumberClean = isPartnerLike ? whatsappNumber.replace(/[^0-9]/g, "") || null : null;
+    const waChannelClean = isPartnerLike ? whatsappChannelUrl.trim() || null : null;
     if (isEdit) {
       const { error: upErr } = await supabase
         .from("products")
@@ -272,32 +263,33 @@ export function ProductForm({ productId }: Props) {
           />
         </Field>
 
-        {(game === "Partner Resmi Bang Pergam" ||
-          game === "Paid Promote Bang Pergam") && (
+        {(game === "Partner Resmi Bang Pergam" || game === "Paid Promote Bang Pergam") && (
           <>
-          <Field label="Nomor WhatsApp (CTA)">
-            <input
-              required
-              value={whatsappNumber}
-              onChange={(e) => setWhatsappNumber(e.target.value)}
-              className="input"
-              placeholder="Contoh: 6282312715218"
-            />
-            <span className="text-[11px] text-muted-foreground block mt-1">
-              Tombol WhatsApp pada produk ini akan mengarah ke nomor tersebut. Gunakan format internasional tanpa "+".
-            </span>
-          </Field>
-          <Field label="Link Saluran WhatsApp (opsional)">
-            <input
-              value={whatsappChannelUrl}
-              onChange={(e) => setWhatsappChannelUrl(e.target.value)}
-              className="input"
-              placeholder="https://whatsapp.com/channel/..."
-            />
-            <span className="text-[11px] text-muted-foreground block mt-1">
-              Jika diisi, akan muncul tombol CTA tambahan untuk saluran WhatsApp pada produk ini. Kosongkan jika tidak ingin menampilkan.
-            </span>
-          </Field>
+            <Field label="Nomor WhatsApp (CTA)">
+              <input
+                required
+                value={whatsappNumber}
+                onChange={(e) => setWhatsappNumber(e.target.value)}
+                className="input"
+                placeholder="Contoh: 6282312715218"
+              />
+              <span className="text-[11px] text-muted-foreground block mt-1">
+                Tombol WhatsApp pada produk ini akan mengarah ke nomor tersebut. Gunakan format
+                internasional tanpa "+".
+              </span>
+            </Field>
+            <Field label="Link Saluran WhatsApp (opsional)">
+              <input
+                value={whatsappChannelUrl}
+                onChange={(e) => setWhatsappChannelUrl(e.target.value)}
+                className="input"
+                placeholder="https://whatsapp.com/channel/..."
+              />
+              <span className="text-[11px] text-muted-foreground block mt-1">
+                Jika diisi, akan muncul tombol CTA tambahan untuk saluran WhatsApp pada produk ini.
+                Kosongkan jika tidak ingin menampilkan.
+              </span>
+            </Field>
           </>
         )}
 
@@ -340,12 +332,7 @@ export function ProductForm({ productId }: Props) {
             </button>
           </div>
         )}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleMainImageUpload}
-          className="text-sm"
-        />
+        <input type="file" accept="image/*" onChange={handleMainImageUpload} className="text-sm" />
       </div>
 
       <div className="card-surface rounded-2xl p-6 space-y-4">
@@ -356,7 +343,10 @@ export function ProductForm({ productId }: Props) {
         {gallery.length > 0 && (
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
             {gallery.map((g, i) => (
-              <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-border">
+              <div
+                key={i}
+                className="relative aspect-square rounded-lg overflow-hidden border border-border"
+              >
                 <img src={g.url} alt="" className="w-full h-full object-cover" />
                 <button
                   type="button"
@@ -453,7 +443,13 @@ export function ProductForm({ productId }: Props) {
           disabled={saving || uploading}
           className="px-6 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold glow-purple-sm disabled:opacity-60"
         >
-          {saving ? "Menyimpan..." : uploading ? "Upload..." : isEdit ? "Simpan Perubahan" : "Buat Produk"}
+          {saving
+            ? "Menyimpan..."
+            : uploading
+              ? "Upload..."
+              : isEdit
+                ? "Simpan Perubahan"
+                : "Buat Produk"}
         </button>
       </div>
     </form>

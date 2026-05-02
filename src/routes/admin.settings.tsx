@@ -8,7 +8,7 @@ export const Route = createFileRoute("/admin/settings")({
 });
 
 function AdminSettings() {
-  const { settings, loading } = useSiteSettings();
+  const { settings, loading, refetch } = useSiteSettings();
   const [waNumber, setWaNumber] = useState("");
   const [igUrl, setIgUrl] = useState("");
   const [saving, setSaving] = useState(false);
@@ -34,8 +34,12 @@ function AdminSettings() {
       })
       .eq("id", true);
     setSaving(false);
-    if (error) setMsg("Gagal menyimpan: " + error.message);
-    else setMsg("Tersimpan! Perubahan langsung muncul di website.");
+    if (error) {
+      setMsg("Gagal menyimpan: " + error.message);
+    } else {
+      setMsg("Tersimpan! Perubahan langsung muncul di website.");
+      refetch();
+    }
   };
 
   return (
@@ -45,9 +49,9 @@ function AdminSettings() {
       </Link>
       <h1 className="font-display text-3xl font-bold mt-2 mb-2">Pengaturan Kontak</h1>
       <p className="text-sm text-muted-foreground mb-6">
-        Nomor WhatsApp dan Instagram di sini akan digunakan di seluruh website
-        utama (kecuali kategori Partner Resmi & Paid Promote yang punya nomor
-        sendiri per produk). Perubahan tampil real-time.
+        Nomor WhatsApp dan Instagram di sini akan digunakan di seluruh website utama (kecuali
+        kategori Partner Resmi & Paid Promote yang punya nomor sendiri per produk). Perubahan tampil
+        real-time.
       </p>
 
       <form onSubmit={handleSave} className="card-surface rounded-2xl p-6 space-y-5">
@@ -78,9 +82,7 @@ function AdminSettings() {
             placeholder="https://instagram.com/username"
             className="w-full px-4 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all text-sm"
           />
-          <p className="text-[11px] text-muted-foreground mt-1.5">
-            Link lengkap profil Instagram.
-          </p>
+          <p className="text-[11px] text-muted-foreground mt-1.5">Link lengkap profil Instagram.</p>
         </div>
 
         {msg && (

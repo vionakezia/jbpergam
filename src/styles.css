@@ -43,7 +43,11 @@
   --shadow-card: 0 8px 32px -12px oklch(0 0 0 / 0.6);
 
   --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
-  --gradient-radial: radial-gradient(circle at 50% 0%, oklch(0.55 0.22 295 / 0.25), transparent 60%);
+  --gradient-radial: radial-gradient(
+    circle at 50% 0%,
+    oklch(0.55 0.22 295 / 0.25),
+    transparent 60%
+  );
   --gradient-card: linear-gradient(180deg, oklch(0.18 0.04 290 / 0.8), oklch(0.13 0.03 290 / 0.6));
 
   --transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
@@ -103,12 +107,15 @@
     font-family: var(--font-sans);
     background-image:
       radial-gradient(ellipse 80% 60% at 50% -10%, oklch(0.62 0.24 295 / 0.18), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 100% 100%, oklch(0.55 0.22 305 / 0.10), transparent 60%);
+      radial-gradient(ellipse 60% 50% at 100% 100%, oklch(0.55 0.22 305 / 0.1), transparent 60%);
     background-attachment: fixed;
     min-height: 100vh;
   }
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
@@ -116,7 +123,9 @@
 
 @layer utilities {
   .glow-purple {
-    box-shadow: 0 0 30px -8px var(--primary), 0 0 60px -20px var(--primary-glow);
+    box-shadow:
+      0 0 30px -8px var(--primary),
+      0 0 60px -20px var(--primary-glow);
   }
   .glow-purple-sm {
     box-shadow: 0 0 18px -6px var(--primary);
@@ -136,11 +145,16 @@
     border: 1px solid oklch(0.32 0.06 295 / 0.5);
   }
   .hover-lift {
-    transition: transform 300ms var(--transition-smooth), box-shadow 300ms var(--transition-smooth), border-color 300ms var(--transition-smooth);
+    transition:
+      transform 300ms var(--transition-smooth),
+      box-shadow 300ms var(--transition-smooth),
+      border-color 300ms var(--transition-smooth);
   }
   .hover-lift:hover {
     transform: translateY(-4px);
-    box-shadow: 0 0 40px -10px var(--primary), 0 20px 40px -20px oklch(0 0 0 / 0.5);
+    box-shadow:
+      0 0 40px -10px var(--primary),
+      0 20px 40px -20px oklch(0 0 0 / 0.5);
     border-color: oklch(0.62 0.24 295 / 0.7);
   }
   .animate-float {
@@ -153,7 +167,9 @@
     animation: fade-up 0.6s var(--transition-smooth) both;
   }
   .grid-fade {
-    transition: opacity 300ms ease, transform 300ms ease;
+    transition:
+      opacity 300ms ease,
+      transform 300ms ease;
   }
   .input {
     width: 100%;
@@ -163,7 +179,9 @@
     border: 1px solid var(--color-border);
     color: var(--color-foreground);
     outline: none;
-    transition: border-color 150ms, box-shadow 150ms;
+    transition:
+      border-color 150ms,
+      box-shadow 150ms;
     font-size: 0.875rem;
   }
   .input:focus {
@@ -173,14 +191,30 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
 }
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px -6px var(--primary); }
-  50% { box-shadow: 0 0 40px -4px var(--primary-glow); }
+  0%,
+  100% {
+    box-shadow: 0 0 20px -6px var(--primary);
+  }
+  50% {
+    box-shadow: 0 0 40px -4px var(--primary-glow);
+  }
 }
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

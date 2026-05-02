@@ -78,7 +78,9 @@ function AdminUsers() {
           <h2 className="font-display font-bold text-lg mb-4">Tambah Admin Baru</h2>
           <form onSubmit={handleAdd} className="space-y-3">
             <div>
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">Email</label>
+              <label className="text-xs uppercase tracking-wider text-muted-foreground">
+                Email
+              </label>
               <input
                 type="email"
                 required

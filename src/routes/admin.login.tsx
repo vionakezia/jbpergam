@@ -65,7 +65,9 @@ function AdminLogin() {
             />
           </div>
           <div>
-            <label className="text-xs uppercase tracking-wider text-muted-foreground">Password</label>
+            <label className="text-xs uppercase tracking-wider text-muted-foreground">
+              Password
+            </label>
             <input
               type="password"
               required

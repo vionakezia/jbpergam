@@ -31,15 +31,25 @@ export function useSiteSettings() {
 
   useEffect(() => {
     refetch();
+
+    // Use a unique channel name to avoid collisions when multiple components use this hook
     const channelName = `site-settings-realtime-${Math.random().toString(36).slice(2, 9)}`;
-    const channel = supabase
-      .channel(channelName)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "site_settings" },
-        () => refetch(),
-      )
-      .subscribe();
+    const channel = supabase.channel(channelName);
+
+    channel
+      .on("postgres_changes", { event: "*", schema: "public", table: "site_settings" }, () => {
+        console.log("Site settings changed, refetching...");
+        refetch();
+      })
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") {
+          console.log("Subscribed to site-settings changes");
+        }
+        if (status === "CHANNEL_ERROR") {
+          console.error("Error subscribing to site-settings changes");
+        }
+      });
+
     return () => {
       supabase.removeChannel(channel);
     };

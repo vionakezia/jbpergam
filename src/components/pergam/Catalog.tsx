@@ -23,8 +23,7 @@ const formatIDR = (n: number) =>
 const buildWaLink = (p: Product, waNumber: string) => {
   // Partner / Paid Promote: gunakan nomor WA spesifik produk
   if (
-    (p.game === "Partner Resmi Bang Pergam" ||
-      p.game === "Paid Promote Bang Pergam") &&
+    (p.game === "Partner Resmi Bang Pergam" || p.game === "Paid Promote Bang Pergam") &&
     p.whatsappNumber
   ) {
     const num = p.whatsappNumber.replace(/[^0-9]/g, "");
@@ -78,8 +77,7 @@ export function Catalog({ initialGame = "all" }: Props) {
       if (status !== "all" && p.status !== status) return false;
       if (query.trim()) {
         const q = query.toLowerCase();
-        if (!p.name.toLowerCase().includes(q) && !p.game.toLowerCase().includes(q))
-          return false;
+        if (!p.name.toLowerCase().includes(q) && !p.game.toLowerCase().includes(q)) return false;
       }
       return true;
     });
@@ -111,12 +109,8 @@ export function Catalog({ initialGame = "all" }: Props) {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-primary mb-3">
-              Katalog
-            </p>
-            <h2 className="font-display text-3xl md:text-5xl font-bold">
-              Stock & Rental tersedia
-            </h2>
+            <p className="text-sm uppercase tracking-[0.2em] text-primary mb-3">Katalog</p>
+            <h2 className="font-display text-3xl md:text-5xl font-bold">Stock & Rental tersedia</h2>
             <p className="mt-3 text-muted-foreground max-w-xl">
               Filter, urutkan, dan cari akun yang kamu butuhkan secara realtime.
             </p>
@@ -132,7 +126,10 @@ export function Catalog({ initialGame = "all" }: Props) {
             />
             <svg
               className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
-              fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
             >
               <circle cx="11" cy="11" r="7" />
               <path d="m21 21-4.3-4.3" strokeLinecap="round" />
@@ -200,8 +197,8 @@ export function Catalog({ initialGame = "all" }: Props) {
                 Top Up Games <span className="gradient-text">Cepat & Aman</span>
               </h3>
               <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-                Layanan top up tersedia langsung di Pergam Shop. Diamond, UC, dan
-                berbagai voucher game lainnya.
+                Layanan top up tersedia langsung di Pergam Shop. Diamond, UC, dan berbagai voucher
+                game lainnya.
               </p>
               <a
                 href={TOPUP_URL}
@@ -275,11 +272,7 @@ export function Catalog({ initialGame = "all" }: Props) {
             className="max-w-4xl max-h-[90vh] overflow-auto rounded-2xl glow-purple-sm"
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={zoomImage.src}
-              alt={zoomImage.name}
-              className="w-full h-auto block"
-            />
+            <img src={zoomImage.src} alt={zoomImage.name} className="w-full h-auto block" />
           </div>
         </div>
       )}
@@ -320,14 +313,13 @@ function ProductCard({
   const isReady = product.status === "Ready";
   const hasPackages = !!product.rentalPackages?.length;
   const isPartnerLike =
-    product.game === "Partner Resmi Bang Pergam" ||
-    product.game === "Paid Promote Bang Pergam";
+    product.game === "Partner Resmi Bang Pergam" || product.game === "Paid Promote Bang Pergam";
   const displayPrice =
     product.price > 0
       ? formatIDR(product.price)
       : hasPackages
-      ? `Mulai ${formatIDR(product.rentalPackages![0].price)}`
-      : "Hubungi";
+        ? `Mulai ${formatIDR(product.rentalPackages![0].price)}`
+        : "Hubungi";
 
   const showEstimate =
     !isReady &&
@@ -370,7 +362,16 @@ function ProductCard({
             aria-label="Zoom image"
             className="absolute bottom-2 right-2 w-8 h-8 md:w-9 md:h-9 rounded-full bg-background/80 backdrop-blur-md border border-primary/40 grid place-items-center hover:bg-primary hover:text-primary-foreground transition-all glow-purple-sm"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <circle cx="11" cy="11" r="7" />
               <path d="m21 21-4.3-4.3" />
               <line x1="11" y1="8" x2="11" y2="14" />
@@ -401,17 +402,13 @@ function ProductCard({
       {showEstimate && (
         <div className="mt-2 flex items-center gap-1 text-[10px] leading-tight px-2 py-1 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/30 self-start max-w-full">
           <span className="shrink-0">⏰</span>
-          <span className="whitespace-normal break-words">
-            Estimasi Ready: {estimateLabel} WIB
-          </span>
+          <span className="whitespace-normal break-words">Estimasi Ready: {estimateLabel} WIB</span>
         </div>
       )}
 
       {!isPartnerLike && (
         <div className="mt-3">
-          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
-            Harga
-          </div>
+          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">Harga</div>
           <div className="font-display text-sm md:text-base font-bold gradient-text leading-tight">
             {displayPrice}
           </div>
@@ -466,12 +463,8 @@ function DetailModal({
 }) {
   const hasPackages = !!product.rentalPackages?.length;
   const isPartnerLike =
-    product.game === "Partner Resmi Bang Pergam" ||
-    product.game === "Paid Promote Bang Pergam";
-  const allImages = [
-    ...(product.image ? [product.image] : []),
-    ...(product.gallery ?? []),
-  ];
+    product.game === "Partner Resmi Bang Pergam" || product.game === "Paid Promote Bang Pergam";
+  const allImages = [...(product.image ? [product.image] : []), ...(product.gallery ?? [])];
   return (
     <div
       className="fixed inset-0 z-[60] grid place-items-center p-4 bg-background/80 backdrop-blur-sm animate-fade-up overflow-y-auto"
@@ -492,9 +485,7 @@ function DetailModal({
           {product.game}
         </span>
         <h3 className="font-display text-2xl font-bold mt-4">{product.name}</h3>
-        <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
-          {product.description}
-        </p>
+        <p className="text-muted-foreground mt-3 text-sm leading-relaxed">{product.description}</p>
 
         {allImages.length > 1 && (
           <div className="mt-4 grid grid-cols-4 gap-2">
@@ -514,9 +505,7 @@ function DetailModal({
           <div className="mt-6">
             <div className="flex items-center gap-2 mb-4">
               <span className="text-xl">✨</span>
-              <h4 className="font-display font-bold text-lg gradient-text">
-                Paket Hemat
-              </h4>
+              <h4 className="font-display font-bold text-lg gradient-text">Paket Hemat</h4>
               <span className="text-xl">✨</span>
             </div>
             <div className="space-y-2.5">
@@ -529,9 +518,7 @@ function DetailModal({
                     <div className="w-9 h-9 rounded-full bg-primary/20 grid place-items-center text-sm">
                       ⏱️
                     </div>
-                    <span className="font-display font-semibold">
-                      {pkg.duration}
-                    </span>
+                    <span className="font-display font-semibold">{pkg.duration}</span>
                   </div>
                   <span className="font-display font-bold text-primary-glow">
                     {formatIDR(pkg.price)}
@@ -565,7 +552,11 @@ function DetailModal({
               : "bg-muted text-muted-foreground cursor-not-allowed pointer-events-none"
           }`}
         >
-          {isPartnerLike ? "Hubungi Sekarang" : product.game === "Rental" ? "Sewa Sekarang" : "Beli Sekarang"}
+          {isPartnerLike
+            ? "Hubungi Sekarang"
+            : product.game === "Rental"
+              ? "Sewa Sekarang"
+              : "Beli Sekarang"}
         </a>
         {isPartnerLike && product.whatsappChannelUrl && (
           <a

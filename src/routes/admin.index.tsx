@@ -26,15 +26,12 @@ const formatIDR = (n: number) =>
   }).format(n);
 
 function AdminDashboard() {
-  const { products, loading } = useProducts();
+  const { products, loading, refetch } = useProducts();
   const [category, setCategory] = useState<"all" | GameType>("all");
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const filtered = useMemo(
-    () =>
-      category === "all"
-        ? products
-        : products.filter((p) => p.game === category),
+    () => (category === "all" ? products : products.filter((p) => p.game === category)),
     [products, category],
   );
 
@@ -51,7 +48,12 @@ function AdminDashboard() {
     setDeletingId(p.id);
     const { error } = await supabase.from("products").delete().eq("id", p.id);
     setDeletingId(null);
-    if (error) alert("Gagal menghapus: " + error.message);
+    if (error) {
+      alert("Gagal menghapus: " + error.message);
+    } else {
+      // Manual refetch as a fallback in case Realtime is not working
+      refetch();
+    }
   };
 
   return (
@@ -159,8 +161,8 @@ function AdminDashboard() {
                       {p.rentalPackages?.length
                         ? `Mulai ${formatIDR(p.rentalPackages[0].price)}`
                         : p.price > 0
-                        ? formatIDR(p.price)
-                        : "—"}
+                          ? formatIDR(p.price)
+                          : "—"}
                     </td>
                     <td className="px-4 py-3">
                       {p.status === "Ready" ? (

@@ -75,7 +75,8 @@ function AdminSetup() {
           <div className="text-4xl mb-3">✅</div>
           <h1 className="font-display font-bold text-xl">Setup sudah selesai</h1>
           <p className="text-sm text-muted-foreground mt-2">
-            Admin sudah aktif di sistem. Silakan langsung login dengan email admin yang sudah ditentukan. Halaman setup ini terkunci untuk keamanan.
+            Admin sudah aktif di sistem. Silakan langsung login dengan email admin yang sudah
+            ditentukan. Halaman setup ini terkunci untuk keamanan.
           </p>
           <Link
             to="/admin/login"
@@ -94,9 +95,7 @@ function AdminSetup() {
         <div className="card-surface rounded-3xl p-8 max-w-md text-center glow-purple-sm">
           <div className="text-4xl mb-3">🎉</div>
           <h1 className="font-display font-bold text-xl">Admin berhasil dibuat!</h1>
-          <p className="text-sm text-muted-foreground mt-2">
-            Mengarahkan ke halaman login...
-          </p>
+          <p className="text-sm text-muted-foreground mt-2">Mengarahkan ke halaman login...</p>
         </div>
       </div>
     );
@@ -109,9 +108,9 @@ function AdminSetup() {
           <div className="text-3xl mb-2">🚀</div>
           <h1 className="font-display text-2xl font-bold">Setup Admin Pertama</h1>
           <p className="text-sm text-muted-foreground mt-2">
-            Buat akun admin pertama untuk mengelola Pergam Store. Email admin sudah
-            dikunci ke <strong>ozinpergam29@gmail.com</strong>. Halaman ini akan
-            terkunci otomatis setelah admin berhasil dibuat.
+            Buat akun admin pertama untuk mengelola Pergam Store. Email admin sudah dikunci ke{" "}
+            <strong>ozinpergam29@gmail.com</strong>. Halaman ini akan terkunci otomatis setelah
+            admin berhasil dibuat.
           </p>
         </div>
 

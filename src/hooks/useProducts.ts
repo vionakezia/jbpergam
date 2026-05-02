@@ -38,11 +38,7 @@ interface RawImage {
   sort_order: number;
 }
 
-function buildProducts(
-  rows: RawProduct[],
-  pkgs: RawPackage[],
-  images: RawImage[],
-): Product[] {
+function buildProducts(rows: RawProduct[], pkgs: RawPackage[], images: RawImage[]): Product[] {
   return rows.map((r) => ({
     id: r.id,
     name: r.name,
@@ -93,24 +89,25 @@ export function useProducts() {
   useEffect(() => {
     refetch();
 
-    const channel = supabase
-      .channel("products-realtime")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "products" },
-        () => refetch(),
+    const channelName = `products-realtime-${Math.random().toString(36).slice(2, 9)}`;
+    const channel = supabase.channel(channelName);
+
+    channel
+      .on("postgres_changes", { event: "*", schema: "public", table: "products" }, () => refetch())
+      .on("postgres_changes", { event: "*", schema: "public", table: "rental_packages" }, () =>
+        refetch(),
       )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "rental_packages" },
-        () => refetch(),
+      .on("postgres_changes", { event: "*", schema: "public", table: "product_images" }, () =>
+        refetch(),
       )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "product_images" },
-        () => refetch(),
-      )
-      .subscribe();
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") {
+          console.log("Subscribed to products changes");
+        }
+        if (status === "CHANNEL_ERROR") {
+          console.error("Error subscribing to products changes");
+        }
+      });
 
     return () => {
       supabase.removeChannel(channel);

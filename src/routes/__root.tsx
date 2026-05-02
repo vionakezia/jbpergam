@@ -30,10 +30,17 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Pergam Store — Game Account Rental & Stock Marketplace" },
-      { name: "description", content: "Trusted marketplace for Free Fire, Mobile Legends stock and account rentals. Cek stock cepat dan aman di Pergam Store." },
+      {
+        name: "description",
+        content:
+          "Trusted marketplace for Free Fire, Mobile Legends stock and account rentals. Cek stock cepat dan aman di Pergam Store.",
+      },
       { name: "author", content: "Pergam Store" },
       { property: "og:title", content: "Pergam Store — Game Account Rental & Stock" },
-      { property: "og:description", content: "Cek stock Free Fire, Mobile Legends dan rental akun dengan cepat dan aman." },
+      {
+        property: "og:description",
+        content: "Cek stock Free Fire, Mobile Legends dan rental akun dengan cepat dan aman.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },

@@ -7,10 +7,7 @@ const ALLOWED_ADMIN_EMAIL = "ozinpergam29@gmail.com";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
-    meta: [
-      { title: "Admin — Pergam Store" },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
+    meta: [{ title: "Admin — Pergam Store" }, { name: "robots", content: "noindex, nofollow" }],
   }),
   component: AdminLayout,
 });
@@ -41,8 +38,7 @@ function AdminLayout() {
 
   if (!user) return null;
 
-  const emailAllowed =
-    (user.email ?? "").toLowerCase() === ALLOWED_ADMIN_EMAIL.toLowerCase();
+  const emailAllowed = (user.email ?? "").toLowerCase() === ALLOWED_ADMIN_EMAIL.toLowerCase();
 
   if (isAdmin === false || !emailAllowed) {
     return (

@@ -49,9 +49,7 @@ export function Faq() {
                   onClick={() => setOpen(isOpen ? null : i)}
                   className="w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left"
                 >
-                  <span className="font-display font-semibold text-base md:text-lg">
-                    {f.q}
-                  </span>
+                  <span className="font-display font-semibold text-base md:text-lg">{f.q}</span>
                   <span
                     className={`shrink-0 w-8 h-8 rounded-full grid place-items-center border transition-all ${
                       isOpen
