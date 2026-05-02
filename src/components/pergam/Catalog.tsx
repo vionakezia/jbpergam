@@ -314,6 +314,9 @@ function ProductCard({
 }) {
   const isReady = product.status === "Ready";
   const hasPackages = !!product.rentalPackages?.length;
+  const isPartnerLike =
+    product.game === "Partner Resmi Bang Pergam" ||
+    product.game === "Paid Promote Bang Pergam";
   const displayPrice =
     product.price > 0
       ? formatIDR(product.price)
@@ -399,14 +402,16 @@ function ProductCard({
         </div>
       )}
 
-      <div className="mt-3">
-        <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
-          Harga
+      {!isPartnerLike && (
+        <div className="mt-3">
+          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
+            Harga
+          </div>
+          <div className="font-display text-sm md:text-base font-bold gradient-text leading-tight">
+            {displayPrice}
+          </div>
         </div>
-        <div className="font-display text-sm md:text-base font-bold gradient-text leading-tight">
-          {displayPrice}
-        </div>
-      </div>
+      )}
 
       <div className="mt-3 grid grid-cols-2 gap-1.5">
         <a
@@ -420,7 +425,7 @@ function ProductCard({
               : "bg-muted text-muted-foreground cursor-not-allowed pointer-events-none"
           }`}
         >
-          {product.game === "Rental" ? "Sewa" : "Beli"}
+          {isPartnerLike ? "Hubungi" : product.game === "Rental" ? "Sewa" : "Beli"}
         </a>
         <button
           onClick={onDetail}
