@@ -28,7 +28,7 @@ const buildWaLink = (p: Product) => {
     p.whatsappNumber
   ) {
     const num = p.whatsappNumber.replace(/[^0-9]/g, "");
-    const msg = `Halo, saya tertarik dengan ${p.name} dari Bang Pergam.`;
+    const msg = `Halo Kak ${p.name} , Saya kenal kakak dari Web Bang Pergam`;
     return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
   }
   const action = p.game === "Rental" ? "menyewa" : "membeli";
