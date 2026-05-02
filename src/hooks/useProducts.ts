@@ -20,6 +20,7 @@ interface RawProduct {
   created_at: string;
   ready_estimate_at: string | null;
   whatsapp_number: string | null;
+  whatsapp_channel_url: string | null;
 }
 
 interface RawPackage {
@@ -53,6 +54,7 @@ function buildProducts(
     createdAt: new Date(r.created_at).getTime(),
     readyEstimateAt: r.ready_estimate_at,
     whatsappNumber: r.whatsapp_number,
+    whatsappChannelUrl: r.whatsapp_channel_url,
     rentalPackages: pkgs
       .filter((p) => p.product_id === r.id)
       .sort((a, b) => a.sort_order - b.sort_order)
