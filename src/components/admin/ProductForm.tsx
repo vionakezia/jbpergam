@@ -45,6 +45,7 @@ export function ProductForm({ productId }: Props) {
   const [uploading, setUploading] = useState(false);
   const [readyEstimate, setReadyEstimate] = useState<string>("");
   const [whatsappNumber, setWhatsappNumber] = useState<string>("");
+  const [whatsappChannelUrl, setWhatsappChannelUrl] = useState<string>("");
 
   useEffect(() => {
     if (!isEdit) return;
@@ -70,6 +71,7 @@ export function ProductForm({ productId }: Props) {
         setDescription(prod.description);
         setMainImage(prod.image_url ?? "");
         setWhatsappNumber((prod as { whatsapp_number?: string | null }).whatsapp_number ?? "");
+        setWhatsappChannelUrl((prod as { whatsapp_channel_url?: string | null }).whatsapp_channel_url ?? "");
         if (prod.ready_estimate_at) {
           // Convert ISO UTC -> local "YYYY-MM-DDTHH:mm" for datetime-local input
           const d = new Date(prod.ready_estimate_at);
@@ -135,6 +137,9 @@ export function ProductForm({ productId }: Props) {
     const waNumberClean = isPartnerLike
       ? whatsappNumber.replace(/[^0-9]/g, "") || null
       : null;
+    const waChannelClean = isPartnerLike
+      ? (whatsappChannelUrl.trim() || null)
+      : null;
     if (isEdit) {
       const { error: upErr } = await supabase
         .from("products")
@@ -147,6 +152,7 @@ export function ProductForm({ productId }: Props) {
           image_url: mainImage || null,
           ready_estimate_at: readyEstIso,
           whatsapp_number: waNumberClean,
+          whatsapp_channel_url: waChannelClean,
         })
         .eq("id", productId);
       if (upErr) {
@@ -166,6 +172,7 @@ export function ProductForm({ productId }: Props) {
           image_url: mainImage || null,
           ready_estimate_at: readyEstIso,
           whatsapp_number: waNumberClean,
+          whatsapp_channel_url: waChannelClean,
         })
         .select("id")
         .single();
@@ -267,6 +274,7 @@ export function ProductForm({ productId }: Props) {
 
         {(game === "Partner Resmi Bang Pergam" ||
           game === "Paid Promote Bang Pergam") && (
+          <>
           <Field label="Nomor WhatsApp (CTA)">
             <input
               required
@@ -279,6 +287,18 @@ export function ProductForm({ productId }: Props) {
               Tombol WhatsApp pada produk ini akan mengarah ke nomor tersebut. Gunakan format internasional tanpa "+".
             </span>
           </Field>
+          <Field label="Link Saluran WhatsApp (opsional)">
+            <input
+              value={whatsappChannelUrl}
+              onChange={(e) => setWhatsappChannelUrl(e.target.value)}
+              className="input"
+              placeholder="https://whatsapp.com/channel/..."
+            />
+            <span className="text-[11px] text-muted-foreground block mt-1">
+              Jika diisi, akan muncul tombol CTA tambahan untuk saluran WhatsApp pada produk ini. Kosongkan jika tidak ingin menampilkan.
+            </span>
+          </Field>
+          </>
         )}
 
         <Field label="Deskripsi">

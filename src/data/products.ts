@@ -27,4 +27,5 @@ export interface Product {
   gallery?: string[];
   readyEstimateAt?: string | null;
   whatsappNumber?: string | null;
+  whatsappChannelUrl?: string | null;
 }

@@ -28,7 +28,7 @@ const buildWaLink = (p: Product) => {
     p.whatsappNumber
   ) {
     const num = p.whatsappNumber.replace(/[^0-9]/g, "");
-    const msg = `Halo, saya tertarik dengan ${p.name} dari Bang Pergam.`;
+    const msg = `Halo Kak ${p.name} , Saya kenal kakak dari Web Bang Pergam`;
     return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
   }
   const action = p.game === "Rental" ? "menyewa" : "membeli";
@@ -314,6 +314,9 @@ function ProductCard({
 }) {
   const isReady = product.status === "Ready";
   const hasPackages = !!product.rentalPackages?.length;
+  const isPartnerLike =
+    product.game === "Partner Resmi Bang Pergam" ||
+    product.game === "Paid Promote Bang Pergam";
   const displayPrice =
     product.price > 0
       ? formatIDR(product.price)
@@ -399,14 +402,16 @@ function ProductCard({
         </div>
       )}
 
-      <div className="mt-3">
-        <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
-          Harga
+      {!isPartnerLike && (
+        <div className="mt-3">
+          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
+            Harga
+          </div>
+          <div className="font-display text-sm md:text-base font-bold gradient-text leading-tight">
+            {displayPrice}
+          </div>
         </div>
-        <div className="font-display text-sm md:text-base font-bold gradient-text leading-tight">
-          {displayPrice}
-        </div>
-      </div>
+      )}
 
       <div className="mt-3 grid grid-cols-2 gap-1.5">
         <a
@@ -420,7 +425,7 @@ function ProductCard({
               : "bg-muted text-muted-foreground cursor-not-allowed pointer-events-none"
           }`}
         >
-          {product.game === "Rental" ? "Sewa" : "Beli"}
+          {isPartnerLike ? "Hubungi" : product.game === "Rental" ? "Sewa" : "Beli"}
         </a>
         <button
           onClick={onDetail}
@@ -429,6 +434,16 @@ function ProductCard({
           Detail
         </button>
       </div>
+      {isPartnerLike && product.whatsappChannelUrl && (
+        <a
+          href={product.whatsappChannelUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1.5 block text-center text-xs font-semibold py-2 rounded-full border border-primary/40 text-foreground hover:bg-primary/10 hover:border-primary transition-all"
+        >
+          Saluran WA
+        </a>
+      )}
     </article>
   );
 }
@@ -443,6 +458,9 @@ function DetailModal({
   onZoom: (src: string) => void;
 }) {
   const hasPackages = !!product.rentalPackages?.length;
+  const isPartnerLike =
+    product.game === "Partner Resmi Bang Pergam" ||
+    product.game === "Paid Promote Bang Pergam";
   const allImages = [
     ...(product.image ? [product.image] : []),
     ...(product.gallery ?? []),
@@ -518,7 +536,7 @@ function DetailModal({
               Hubungi admin untuk pilih paket sesuai kebutuhanmu.
             </p>
           </div>
-        ) : (
+        ) : isPartnerLike ? null : (
           <div className="mt-6 flex items-center justify-between">
             <div>
               <div className="text-xs text-muted-foreground">Harga</div>
@@ -540,8 +558,18 @@ function DetailModal({
               : "bg-muted text-muted-foreground cursor-not-allowed pointer-events-none"
           }`}
         >
-          {product.game === "Rental" ? "Sewa Sekarang" : "Beli Sekarang"}
+          {isPartnerLike ? "Hubungi Sekarang" : product.game === "Rental" ? "Sewa Sekarang" : "Beli Sekarang"}
         </a>
+        {isPartnerLike && product.whatsappChannelUrl && (
+          <a
+            href={product.whatsappChannelUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 block w-full text-center py-3 rounded-full font-semibold border border-primary/40 text-foreground hover:bg-primary/10 hover:border-primary transition-all"
+          >
+            Gabung Saluran WhatsApp
+          </a>
+        )}
       </div>
     </div>
   );
