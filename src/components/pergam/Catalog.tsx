@@ -239,6 +239,7 @@ export function Catalog({ initialGame = "all" }: Props) {
                 key={p.id}
                 product={p}
                 index={i}
+                waNumber={settings.whatsappNumber}
                 onDetail={() => setDetail(p)}
                 onZoom={(src) => setZoomImage({ src, name: p.name })}
               />
@@ -251,6 +252,7 @@ export function Catalog({ initialGame = "all" }: Props) {
       {detail && (
         <DetailModal
           product={detail}
+          waNumber={settings.whatsappNumber}
           onClose={() => setDetail(null)}
           onZoom={(src) => setZoomImage({ src, name: detail.name })}
         />
@@ -285,12 +287,12 @@ export function Catalog({ initialGame = "all" }: Props) {
   );
 }
 
-function StatusBadge({ status }: { status: Status }) {
+function StatusBadge({ status, readyLabel = "Ready" }: { status: Status; readyLabel?: string }) {
   if (status === "Ready") {
     return (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary/20 text-primary-glow border border-primary/40 glow-purple-sm">
         <span className="w-1.5 h-1.5 rounded-full bg-primary-glow animate-pulse" />
-        Ready
+        {readyLabel}
       </span>
     );
   }
@@ -305,11 +307,13 @@ function StatusBadge({ status }: { status: Status }) {
 function ProductCard({
   product,
   index,
+  waNumber,
   onDetail,
   onZoom,
 }: {
   product: Product;
   index: number;
+  waNumber: string;
   onDetail: () => void;
   onZoom: (src: string) => void;
 }) {
@@ -384,7 +388,7 @@ function ProductCard({
         <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/30 truncate">
           {product.game}
         </span>
-        <StatusBadge status={product.status} />
+        <StatusBadge status={product.status} readyLabel={isPartnerLike ? "Online" : "Ready"} />
       </div>
 
       <h3 className="font-display font-semibold text-sm md:text-base leading-snug line-clamp-1">
@@ -416,7 +420,7 @@ function ProductCard({
 
       <div className="mt-3 grid grid-cols-2 gap-1.5">
         <a
-          href={isReady ? buildWaLink(product) : undefined}
+          href={isReady ? buildWaLink(product, waNumber) : undefined}
           target="_blank"
           rel="noopener noreferrer"
           aria-disabled={!isReady}
@@ -451,10 +455,12 @@ function ProductCard({
 
 function DetailModal({
   product,
+  waNumber,
   onClose,
   onZoom,
 }: {
   product: Product;
+  waNumber: string;
   onClose: () => void;
   onZoom: (src: string) => void;
 }) {
@@ -545,12 +551,12 @@ function DetailModal({
                 {product.price > 0 ? formatIDR(product.price) : "Hubungi Admin"}
               </div>
             </div>
-            <StatusBadge status={product.status} />
+            <StatusBadge status={product.status} readyLabel={isPartnerLike ? "Online" : "Ready"} />
           </div>
         )}
 
         <a
-          href={buildWaLink(product)}
+          href={buildWaLink(product, waNumber)}
           target="_blank"
           rel="noopener noreferrer"
           className={`mt-6 block w-full text-center py-3 rounded-full font-semibold transition-all ${

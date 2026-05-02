@@ -1,4 +1,10 @@
+import { useSiteSettings } from "@/hooks/useSiteSettings";
+
 export function Contact() {
+  const { settings } = useSiteSettings();
+  const waLink = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(
+    "Halo, Pergam Store! Saya ingin bertanya tentang produk Anda.",
+  )}`;
   return (
     <section id="contact" className="relative py-20 md:py-28">
       <div className="max-w-5xl mx-auto px-6">
@@ -18,7 +24,7 @@ export function Contact() {
 
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="https://wa.me/6282312715218?text=Halo%2C%20Pergam%20Store!%20Saya%20ingin%20bertanya%20tentang%20produk%20Anda."
+                href={waLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-primary text-primary-foreground font-semibold glow-purple hover:animate-pulse-glow transition-all hover:-translate-y-0.5"
@@ -29,7 +35,7 @@ export function Contact() {
                 Chat WhatsApp
               </a>
               <a
-                href="https://instagram.com/rental.pergamff"
+                href={settings.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full border border-primary/40 bg-card/40 backdrop-blur-md font-semibold hover:bg-primary/10 hover:border-primary transition-all"
