@@ -4,16 +4,16 @@
 Marketplace untuk rental akun game dan stok akun (Free Fire, Mobile Legends). Proyek ini merupakan hasil clone dari jbpergam.
 
 ## Stack Teknologi
-- Frontend: TanStack Start (React 19)
-- Backend: TanStack Start (SSR)
+- Frontend: React 19 (via TanStack Start)
+- Backend: Serverless (via TanStack Start SSR)
 - Database: Supabase
 - Styling: Tailwind CSS v4
 - Auth: Supabase Auth
-- Hosting: Vercel (Migrasi dari Cloudflare)
+- Hosting: Vercel
 
 ## Mode Arsitektur
-[x] TanStack Start Fullstack
-[ ] Laravel 13 API + Next.js Frontend
+[x] TanStack Start Fullstack (SSR)
+[ ] SPA Mode
 [ ] Lainnya: ___
 
 ## Target Platform
@@ -36,17 +36,18 @@ Marketplace untuk rental akun game dan stok akun (Free Fire, Mobile Legends). Pr
 
 ## Hosting & Infra
 - Development: local
-- Production: Vercel
+- Production: Vercel (Framework Preset: Other)
 
 ## Catatan Khusus
-- Proyek dikonfigurasi untuk menggunakan folder `.output` saat dideploy di Vercel.
-- Menggunakan `@lovable.dev/vite-tanstack-config`.
+- Proyek menghasilkan output di folder `dist/client` dan `dist/server`.
+- Deployment di Vercel menggunakan preset "Other" dengan build command `npm run build`.
+- Masalah Realtime dan Line Endings (CRLF) telah diperbaiki pada Mei 2026.
 
 ## Progress Terakhir
-- Repositori berhasil di-clone dan dipindahkan ke D:\Mahin Project\jbpergam.
-- .gitignore telah diperbarui dan .env telah di-untrack.
-- Konfigurasi vercel.json telah ditambahkan.
-- Folder public telah dibuat.
+- Memperbaiki error `cannot add callbacks` pada Supabase Realtime dengan nama channel unik.
+- Menambahkan manual `refetch()` pada aksi hapus produk dan simpan pengaturan sebagai fallback.
+- Menyelaraskan format file ke Unix Line Endings (LF) untuk menghindari error ESLint.
+- Konfigurasi deployment Vercel diperbarui (menggunakan preset Other).
 
 ## Last Updated
-2026-04-24
+2026-05-02
