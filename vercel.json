@@ -2,9 +2,20 @@
   "version": 2,
   "public": true,
   "buildCommand": "npm run build",
-  "outputDirectory": "dist/client",
+  "outputDirectory": "dist",
+  "functions": {
+    "server/server.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
   "rewrites": [
-    { "source": "/assets/(.*)", "destination": "/assets/$1" },
-    { "source": "/(.*)", "destination": "/../server/server.js" }
+    {
+      "source": "/assets/(.*)",
+      "destination": "/client/assets/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/server/server.js"
+    }
   ]
 }
