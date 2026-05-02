@@ -434,6 +434,16 @@ function ProductCard({
           Detail
         </button>
       </div>
+      {isPartnerLike && product.whatsappChannelUrl && (
+        <a
+          href={product.whatsappChannelUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1.5 block text-center text-xs font-semibold py-2 rounded-full border border-primary/40 text-foreground hover:bg-primary/10 hover:border-primary transition-all"
+        >
+          Saluran WA
+        </a>
+      )}
     </article>
   );
 }
