@@ -448,6 +448,9 @@ function DetailModal({
   onZoom: (src: string) => void;
 }) {
   const hasPackages = !!product.rentalPackages?.length;
+  const isPartnerLike =
+    product.game === "Partner Resmi Bang Pergam" ||
+    product.game === "Paid Promote Bang Pergam";
   const allImages = [
     ...(product.image ? [product.image] : []),
     ...(product.gallery ?? []),
@@ -523,7 +526,7 @@ function DetailModal({
               Hubungi admin untuk pilih paket sesuai kebutuhanmu.
             </p>
           </div>
-        ) : (
+        ) : isPartnerLike ? null : (
           <div className="mt-6 flex items-center justify-between">
             <div>
               <div className="text-xs text-muted-foreground">Harga</div>
@@ -545,8 +548,18 @@ function DetailModal({
               : "bg-muted text-muted-foreground cursor-not-allowed pointer-events-none"
           }`}
         >
-          {product.game === "Rental" ? "Sewa Sekarang" : "Beli Sekarang"}
+          {isPartnerLike ? "Hubungi Sekarang" : product.game === "Rental" ? "Sewa Sekarang" : "Beli Sekarang"}
         </a>
+        {isPartnerLike && product.whatsappChannelUrl && (
+          <a
+            href={product.whatsappChannelUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 block w-full text-center py-3 rounded-full font-semibold border border-primary/40 text-foreground hover:bg-primary/10 hover:border-primary transition-all"
+          >
+            Gabung Saluran WhatsApp
+          </a>
+        )}
       </div>
     </div>
   );
