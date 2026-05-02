@@ -129,6 +129,27 @@ export type Database = {
           },
         ]
       }
+      site_settings: {
+        Row: {
+          id: boolean
+          instagram_url: string
+          updated_at: string
+          whatsapp_number: string
+        }
+        Insert: {
+          id?: boolean
+          instagram_url?: string
+          updated_at?: string
+          whatsapp_number?: string
+        }
+        Update: {
+          id?: boolean
+          instagram_url?: string
+          updated_at?: string
+          whatsapp_number?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

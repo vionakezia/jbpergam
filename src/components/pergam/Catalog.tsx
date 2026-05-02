@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useProducts } from "../../hooks/useProducts";
+import { useSiteSettings } from "../../hooks/useSiteSettings";
 import type { GameType, Status, Product } from "../../data/products";
 
 type GameFilter = "all" | GameType;
@@ -10,7 +11,6 @@ interface Props {
   initialGame?: GameFilter;
 }
 
-const WA_NUMBER = "6282312715218";
 const TOPUP_URL = "https://www.pergamshop.com";
 
 const formatIDR = (n: number) =>
@@ -20,7 +20,7 @@ const formatIDR = (n: number) =>
     maximumFractionDigits: 0,
   }).format(n);
 
-const buildWaLink = (p: Product) => {
+const buildWaLink = (p: Product, waNumber: string) => {
   // Partner / Paid Promote: gunakan nomor WA spesifik produk
   if (
     (p.game === "Partner Resmi Bang Pergam" ||
@@ -33,11 +33,12 @@ const buildWaLink = (p: Product) => {
   }
   const action = p.game === "Rental" ? "menyewa" : "membeli";
   const msg = `Halo, Pergam Store! Saya berminat untuk ${action} ${p.name}. Mohon segera diproses, ya!`;
-  return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+  return `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
 };
 
 export function Catalog({ initialGame = "all" }: Props) {
   const { products, loading } = useProducts();
+  const { settings } = useSiteSettings();
   const [game, setGame] = useState<GameFilter>(initialGame);
   const [status, setStatus] = useState<StatusFilter>("all");
   const [sort, setSort] = useState<SortBy>("newest");
@@ -238,6 +239,7 @@ export function Catalog({ initialGame = "all" }: Props) {
                 key={p.id}
                 product={p}
                 index={i}
+                waNumber={settings.whatsappNumber}
                 onDetail={() => setDetail(p)}
                 onZoom={(src) => setZoomImage({ src, name: p.name })}
               />
@@ -250,6 +252,7 @@ export function Catalog({ initialGame = "all" }: Props) {
       {detail && (
         <DetailModal
           product={detail}
+          waNumber={settings.whatsappNumber}
           onClose={() => setDetail(null)}
           onZoom={(src) => setZoomImage({ src, name: detail.name })}
         />
@@ -284,12 +287,12 @@ export function Catalog({ initialGame = "all" }: Props) {
   );
 }
 
-function StatusBadge({ status }: { status: Status }) {
+function StatusBadge({ status, readyLabel = "Ready" }: { status: Status; readyLabel?: string }) {
   if (status === "Ready") {
     return (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary/20 text-primary-glow border border-primary/40 glow-purple-sm">
         <span className="w-1.5 h-1.5 rounded-full bg-primary-glow animate-pulse" />
-        Ready
+        {readyLabel}
       </span>
     );
   }
@@ -304,11 +307,13 @@ function StatusBadge({ status }: { status: Status }) {
 function ProductCard({
   product,
   index,
+  waNumber,
   onDetail,
   onZoom,
 }: {
   product: Product;
   index: number;
+  waNumber: string;
   onDetail: () => void;
   onZoom: (src: string) => void;
 }) {
@@ -383,7 +388,7 @@ function ProductCard({
         <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/30 truncate">
           {product.game}
         </span>
-        <StatusBadge status={product.status} />
+        <StatusBadge status={product.status} readyLabel={isPartnerLike ? "Online" : "Ready"} />
       </div>
 
       <h3 className="font-display font-semibold text-sm md:text-base leading-snug line-clamp-1">
@@ -415,7 +420,7 @@ function ProductCard({
 
       <div className="mt-3 grid grid-cols-2 gap-1.5">
         <a
-          href={isReady ? buildWaLink(product) : undefined}
+          href={isReady ? buildWaLink(product, waNumber) : undefined}
           target="_blank"
           rel="noopener noreferrer"
           aria-disabled={!isReady}
@@ -450,10 +455,12 @@ function ProductCard({
 
 function DetailModal({
   product,
+  waNumber,
   onClose,
   onZoom,
 }: {
   product: Product;
+  waNumber: string;
   onClose: () => void;
   onZoom: (src: string) => void;
 }) {
@@ -544,12 +551,12 @@ function DetailModal({
                 {product.price > 0 ? formatIDR(product.price) : "Hubungi Admin"}
               </div>
             </div>
-            <StatusBadge status={product.status} />
+            <StatusBadge status={product.status} readyLabel={isPartnerLike ? "Online" : "Ready"} />
           </div>
         )}
 
         <a
-          href={buildWaLink(product)}
+          href={buildWaLink(product, waNumber)}
           target="_blank"
           rel="noopener noreferrer"
           className={`mt-6 block w-full text-center py-3 rounded-full font-semibold transition-all ${
