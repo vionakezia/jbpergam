@@ -59,6 +59,7 @@ export type Database = {
           sort_order: number
           status: Database["public"]["Enums"]["product_status"]
           updated_at: string
+          whatsapp_channel_url: string | null
           whatsapp_number: string | null
         }
         Insert: {
@@ -73,6 +74,7 @@ export type Database = {
           sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
           updated_at?: string
+          whatsapp_channel_url?: string | null
           whatsapp_number?: string | null
         }
         Update: {
@@ -87,6 +89,7 @@ export type Database = {
           sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
           updated_at?: string
+          whatsapp_channel_url?: string | null
           whatsapp_number?: string | null
         }
         Relationships: []
