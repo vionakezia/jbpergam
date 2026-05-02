@@ -32,25 +32,27 @@ export function useSiteSettings() {
   useEffect(() => {
     refetch();
 
-    // Use a unique channel name to avoid collisions when multiple components use this hook
-    const channelName = `site-settings-realtime-${Math.random().toString(36).slice(2, 9)}`;
+    // Use a truly unique channel name to avoid collisions, especially in Strict Mode
+    const channelId = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+    const channelName = `site-settings-realtime-${channelId}`;
     const channel = supabase.channel(channelName);
 
     channel
       .on("postgres_changes", { event: "*", schema: "public", table: "site_settings" }, () => {
-        console.log("Site settings changed, refetching...");
+        console.log(`[Realtime] ${channelName} changed, refetching...`);
         refetch();
       })
       .subscribe((status) => {
         if (status === "SUBSCRIBED") {
-          console.log("Subscribed to site-settings changes");
+          console.log(`[Realtime] Subscribed to ${channelName}`);
         }
         if (status === "CHANNEL_ERROR") {
-          console.error("Error subscribing to site-settings changes");
+          console.error(`[Realtime] Error subscribing to ${channelName}`);
         }
       });
 
     return () => {
+      console.log(`[Realtime] Removing channel: ${channelName}`);
       supabase.removeChannel(channel);
     };
   }, []);

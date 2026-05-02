@@ -23,9 +23,6 @@
     "production": "vercel"
   },
   "infraBudget": "free-tier",
-  "activeRules": [
-    "nextjs-fullstack",
-    "postgresql"
-  ],
+  "activeRules": ["nextjs-fullstack", "postgresql"],
   "notes": "Migrasi dari Cloudflare ke Vercel. Menggunakan .output directory."
 }

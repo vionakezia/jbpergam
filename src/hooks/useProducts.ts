@@ -89,27 +89,33 @@ export function useProducts() {
   useEffect(() => {
     refetch();
 
-    const channelName = `products-realtime-${Math.random().toString(36).slice(2, 9)}`;
+    // Use a truly unique channel name to avoid collisions, especially in Strict Mode
+    const channelId = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+    const channelName = `products-realtime-${channelId}`;
     const channel = supabase.channel(channelName);
 
     channel
-      .on("postgres_changes", { event: "*", schema: "public", table: "products" }, () => refetch())
-      .on("postgres_changes", { event: "*", schema: "public", table: "rental_packages" }, () =>
-        refetch(),
-      )
-      .on("postgres_changes", { event: "*", schema: "public", table: "product_images" }, () =>
-        refetch(),
-      )
+      .on("postgres_changes", { event: "*", schema: "public", table: "products" }, () => {
+        refetch();
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "rental_packages" }, () => {
+        refetch();
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "site_settings" }, () => {
+        console.log(`[Realtime] ${channelName} changed, refetching...`);
+        refetch();
+      })
       .subscribe((status) => {
         if (status === "SUBSCRIBED") {
-          console.log("Subscribed to products changes");
+          console.log(`[Realtime] Subscribed to ${channelName}`);
         }
         if (status === "CHANNEL_ERROR") {
-          console.error("Error subscribing to products changes");
+          console.error(`[Realtime] Error subscribing to ${channelName}`);
         }
       });
 
     return () => {
+      console.log(`[Realtime] Removing channel: ${channelName}`);
       supabase.removeChannel(channel);
     };
   }, []);

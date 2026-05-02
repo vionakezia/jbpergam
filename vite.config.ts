@@ -10,5 +10,5 @@ export default defineConfig({
   cloudflare: false,
   vite: {
     // Tambahkan config vite tambahan di sini jika perlu
-  }
+  },
 });
