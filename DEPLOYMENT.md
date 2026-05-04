@@ -7,7 +7,7 @@ Set these environment variables in Vercel Dashboard (Settings > Environment Vari
 | Variable                 | Description              | Example                                   |
 | ------------------------ | ------------------------ | ----------------------------------------- |
 | `VITE_SUPABASE_URL`      | Supabase project URL     | `https://xxx.supabase.co`                 |
-| `VITE_SUPABASE_ANON_KEY` | Supabase anon/public key | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` |
+| `VITE_SUPABASE_ANON_KEY` | Supabase anon/public key | `eyJhbGciO..............................` |
 
 ### Cara Mendapatkan Supabase Credentials
 

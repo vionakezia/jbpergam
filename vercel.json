@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "public": true,
   "buildCommand": "npm run build",
   "outputDirectory": "dist/client",
+  "functions": {
+    "api/server.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
   "rewrites": [
     {
       "source": "/assets/(.*)",
@@ -10,7 +14,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "/api/server.js"
+      "destination": "/api/server"
     }
   ]
 }
