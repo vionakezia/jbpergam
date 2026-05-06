@@ -11,6 +11,8 @@ function AdminSettings() {
   const { settings, loading, refetch } = useSiteSettings();
   const [waNumber, setWaNumber] = useState("");
   const [igUrl, setIgUrl] = useState("");
+  const [tiktokUrl, setTiktokUrl] = useState("");
+  const [waChannelUrl, setWaChannelUrl] = useState("");
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
@@ -18,8 +20,10 @@ function AdminSettings() {
     if (!loading) {
       setWaNumber(settings.whatsappNumber);
       setIgUrl(settings.instagramUrl);
+      setTiktokUrl(settings.tiktokUrl);
+      setWaChannelUrl(settings.whatsappChannelUrl);
     }
-  }, [loading, settings.whatsappNumber, settings.instagramUrl]);
+  }, [loading, settings.whatsappNumber, settings.instagramUrl, settings.tiktokUrl, settings.whatsappChannelUrl]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,6 +89,34 @@ function AdminSettings() {
             className="w-full px-4 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all text-sm"
           />
           <p className="text-[11px] text-muted-foreground mt-1.5">Link lengkap profil Instagram.</p>
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+            URL TikTok (Opsional)
+          </label>
+          <input
+            type="url"
+            value={tiktokUrl}
+            onChange={(e) => setTiktokUrl(e.target.value)}
+            placeholder="https://tiktok.com/@username"
+            className="w-full px-4 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all text-sm"
+          />
+          <p className="text-[11px] text-muted-foreground mt-1.5">Kosongkan jika tidak ingin menampilkan CTA TikTok.</p>
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+            URL Saluran WhatsApp (Opsional)
+          </label>
+          <input
+            type="url"
+            value={waChannelUrl}
+            onChange={(e) => setWaChannelUrl(e.target.value)}
+            placeholder="https://whatsapp.com/channel/..."
+            className="w-full px-4 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all text-sm"
+          />
+          <p className="text-[11px] text-muted-foreground mt-1.5">Kosongkan jika tidak ingin menampilkan CTA Saluran WhatsApp.</p>
         </div>
 
         {msg && (
