@@ -52,6 +52,32 @@ export function Contact() {
                 </svg>
                 Instagram
               </a>
+              {settings.tiktokUrl && (
+                <a
+                  href={settings.tiktokUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full border border-primary/40 bg-card/40 backdrop-blur-md font-semibold hover:bg-primary/10 hover:border-primary transition-all"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005.8 20.1a6.34 6.34 0 0010.86-4.43V8.94a8.16 8.16 0 004.77 1.52V7.05a4.85 4.85 0 01-1.84-.36z" />
+                  </svg>
+                  TikTok
+                </a>
+              )}
+              {settings.whatsappChannelUrl && (
+                <a
+                  href={settings.whatsappChannelUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full border border-primary/40 bg-card/40 backdrop-blur-md font-semibold hover:bg-primary/10 hover:border-primary transition-all"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.7-2C8.4 7.1 8.1 7 7.9 7h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9 0 1.1.8 2.2.9 2.4.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.4.5.6.2 1.1.2 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.3-.1-.5-.1zm-5.5 7.3c-1.7 0-3.4-.5-4.9-1.4l-.4-.2-3.6.9.9-3.6-.2-.4c-1-1.5-1.5-3.3-1.5-5.1 0-5.4 4.4-9.7 9.7-9.7 2.6 0 5 1 6.9 2.9 1.8 1.8 2.9 4.3 2.9 6.8-.1 5.4-4.4 9.8-9.8 9.8zm8.3-18.1C18 1.5 15.1.4 12 .4 5.6.4.4 5.6.4 12c0 2 .5 4 1.5 5.7L.3 24l6.4-1.7c1.7.9 3.6 1.4 5.5 1.4 6.4 0 11.6-5.2 11.6-11.6.1-3.1-1.1-6-3.5-8.5z" />
+                  </svg>
+                  Saluran WA
+                </a>
+              )}
             </div>
 
             <div className="mt-12 pt-8 border-t border-border text-xs text-muted-foreground">
