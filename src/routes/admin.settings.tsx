@@ -31,7 +31,9 @@ function AdminSettings() {
       .update({
         whatsapp_number: cleanWa,
         instagram_url: igUrl.trim(),
-      })
+        tiktok_url: tiktokUrl.trim(),
+        whatsapp_channel_url: waChannelUrl.trim(),
+      } as any)
       .eq("id", true);
     setSaving(false);
     if (error) {
