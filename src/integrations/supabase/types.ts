@@ -137,6 +137,7 @@ export type Database = {
           updated_at: string
           whatsapp_channel_url: string
           whatsapp_number: string
+          whatsapp_number_2: string | null
         }
         Insert: {
           id?: boolean
@@ -145,6 +146,7 @@ export type Database = {
           updated_at?: string
           whatsapp_channel_url?: string
           whatsapp_number?: string
+          whatsapp_number_2?: string | null
         }
         Update: {
           id?: boolean
@@ -153,6 +155,7 @@ export type Database = {
           updated_at?: string
           whatsapp_channel_url?: string
           whatsapp_number?: string
+          whatsapp_number_2?: string | null
         }
         Relationships: []
       }
