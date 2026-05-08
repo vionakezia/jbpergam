@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export interface SiteSettings {
   whatsappNumber: string;
+  whatsappNumber2: string;
   instagramUrl: string;
   tiktokUrl: string;
   whatsappChannelUrl: string;
@@ -10,6 +11,7 @@ export interface SiteSettings {
 
 const DEFAULTS: SiteSettings = {
   whatsappNumber: "6282312715218",
+  whatsappNumber2: "",
   instagramUrl: "https://instagram.com/rental.pergamff",
   tiktokUrl: "",
   whatsappChannelUrl: "",
@@ -22,11 +24,12 @@ export function useSiteSettings() {
   const refetch = async () => {
     const { data } = await supabase
       .from("site_settings")
-      .select("whatsapp_number, instagram_url, tiktok_url, whatsapp_channel_url")
+      .select("whatsapp_number, instagram_url, tiktok_url, whatsapp_channel_url, whatsapp_number_2")
       .maybeSingle();
     if (data) {
       setSettings({
         whatsappNumber: data.whatsapp_number ?? DEFAULTS.whatsappNumber,
+        whatsappNumber2: (data as any).whatsapp_number_2 ?? "",
         instagramUrl: data.instagram_url ?? DEFAULTS.instagramUrl,
         tiktokUrl: (data as any).tiktok_url ?? "",
         whatsappChannelUrl: (data as any).whatsapp_channel_url ?? "",

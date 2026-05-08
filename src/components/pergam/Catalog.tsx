@@ -3,12 +3,12 @@ import { useProducts } from "../../hooks/useProducts";
 import { useSiteSettings } from "../../hooks/useSiteSettings";
 import type { GameType, Status, Product } from "../../data/products";
 
-type GameFilter = "all" | GameType;
+type GameFilter = GameType;
 type StatusFilter = "all" | "Ready" | "Not Available";
 type SortBy = "newest" | "price-asc" | "price-desc";
 
 interface Props {
-  initialGame?: GameFilter;
+  initialGame?: GameFilter | "all";
 }
 
 const TOPUP_URL = "https://www.pergamshop.com";
@@ -35,10 +35,14 @@ const buildWaLink = (p: Product, waNumber: string) => {
   return `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
 };
 
-export function Catalog({ initialGame = "all" }: Props) {
+const DEFAULT_GAME: GameFilter = "Free Fire";
+
+export function Catalog({ initialGame }: Props) {
   const { products, loading } = useProducts();
   const { settings } = useSiteSettings();
-  const [game, setGame] = useState<GameFilter>(initialGame);
+  const [game, setGame] = useState<GameFilter>(
+    initialGame && initialGame !== "all" ? initialGame : DEFAULT_GAME,
+  );
   const [status, setStatus] = useState<StatusFilter>("all");
   const [sort, setSort] = useState<SortBy>("newest");
   const [query, setQuery] = useState("");
@@ -47,7 +51,7 @@ export function Catalog({ initialGame = "all" }: Props) {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    setGame(initialGame);
+    if (initialGame && initialGame !== "all") setGame(initialGame);
   }, [initialGame]);
 
   useEffect(() => {
@@ -73,7 +77,7 @@ export function Catalog({ initialGame = "all" }: Props) {
   const filtered = useMemo(() => {
     if (game === "Top Up") return [];
     let list = effective.filter((p) => {
-      if (game !== "all" && p.game !== game) return false;
+      if (p.game !== game) return false;
       if (status !== "all" && p.status !== status) return false;
       if (query.trim()) {
         const q = query.toLowerCase();
@@ -88,7 +92,6 @@ export function Catalog({ initialGame = "all" }: Props) {
   }, [effective, game, status, sort, query]);
 
   const games: { v: GameFilter; label: string }[] = [
-    { v: "all", label: "All" },
     { v: "Free Fire", label: "Free Fire" },
     { v: "Mobile Legends", label: "Mobile Legends" },
     { v: "Rental", label: "Rental" },
@@ -212,7 +215,13 @@ export function Catalog({ initialGame = "all" }: Props) {
             </div>
           </div>
         ) : loading ? (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div
+            className={`grid ${
+              game === "Partner Resmi Bang Pergam" || game === "Paid Promote Bang Pergam"
+                ? "grid-cols-3 lg:grid-cols-4"
+                : "grid-cols-2 lg:grid-cols-4"
+            } gap-4 md:gap-6`}
+          >
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="card-surface rounded-2xl p-4 animate-pulse">
                 <div className="aspect-[3/4] rounded-xl bg-muted/40 mb-4" />
@@ -230,7 +239,13 @@ export function Catalog({ initialGame = "all" }: Props) {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div
+            className={`grid ${
+              game === "Partner Resmi Bang Pergam" || game === "Paid Promote Bang Pergam"
+                ? "grid-cols-3 lg:grid-cols-4"
+                : "grid-cols-2 lg:grid-cols-4"
+            } gap-4 md:gap-6`}
+          >
             {filtered.map((p, i) => (
               <ProductCard
                 key={p.id}

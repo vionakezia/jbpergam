@@ -5,6 +5,11 @@ export function Contact() {
   const waLink = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(
     "Halo, Pergam Store! Saya ingin bertanya tentang produk Anda.",
   )}`;
+  const waLink2 = settings.whatsappNumber2
+    ? `https://wa.me/${settings.whatsappNumber2}?text=${encodeURIComponent(
+        "Halo, Pergam Store! Saya ingin bertanya tentang produk Anda.",
+      )}`
+    : null;
   return (
     <section id="contact" className="relative py-20 md:py-28">
       <div className="max-w-5xl mx-auto px-6">
@@ -32,6 +37,19 @@ export function Contact() {
                 </svg>
                 Chat WhatsApp
               </a>
+              {waLink2 && (
+                <a
+                  href={waLink2}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-primary text-primary-foreground font-semibold glow-purple hover:animate-pulse-glow transition-all hover:-translate-y-0.5"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.7-2C8.4 7.1 8.1 7 7.9 7h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9 0 1.1.8 2.2.9 2.4.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.4.5.6.2 1.1.2 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.3-.1-.5-.1zm-5.5 7.3c-1.7 0-3.4-.5-4.9-1.4l-.4-.2-3.6.9.9-3.6-.2-.4c-1-1.5-1.5-3.3-1.5-5.1 0-5.4 4.4-9.7 9.7-9.7 2.6 0 5 1 6.9 2.9 1.8 1.8 2.9 4.3 2.9 6.8-.1 5.4-4.4 9.8-9.8 9.8zm8.3-18.1C18 1.5 15.1.4 12 .4 5.6.4.4 5.6.4 12c0 2 .5 4 1.5 5.7L.3 24l6.4-1.7c1.7.9 3.6 1.4 5.5 1.4 6.4 0 11.6-5.2 11.6-11.6.1-3.1-1.1-6-3.5-8.5z" />
+                  </svg>
+                  Chat WhatsApp 2
+                </a>
+              )}
               <a
                 href={settings.instagramUrl}
                 target="_blank"
