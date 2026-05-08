@@ -215,13 +215,7 @@ export function Catalog({ initialGame }: Props) {
             </div>
           </div>
         ) : loading ? (
-          <div
-            className={`grid ${
-              game === "Partner Resmi Bang Pergam" || game === "Paid Promote Bang Pergam"
-                ? "grid-cols-3 lg:grid-cols-4"
-                : "grid-cols-2 lg:grid-cols-4"
-            } gap-4 md:gap-6`}
-          >
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="card-surface rounded-2xl p-4 animate-pulse">
                 <div className="aspect-[3/4] rounded-xl bg-muted/40 mb-4" />
@@ -239,13 +233,7 @@ export function Catalog({ initialGame }: Props) {
             </p>
           </div>
         ) : (
-          <div
-            className={`grid ${
-              game === "Partner Resmi Bang Pergam" || game === "Paid Promote Bang Pergam"
-                ? "grid-cols-3 lg:grid-cols-4"
-                : "grid-cols-2 lg:grid-cols-4"
-            } gap-4 md:gap-6`}
-          >
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {filtered.map((p, i) => (
               <ProductCard
                 key={p.id}
