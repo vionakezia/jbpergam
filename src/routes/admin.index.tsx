@@ -8,8 +8,7 @@ export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
 });
 
-const CATEGORIES: { v: "all" | GameType; label: string; icon: string }[] = [
-  { v: "all", label: "Semua", icon: "📦" },
+const CATEGORIES: { v: GameType; label: string; icon: string }[] = [
   { v: "Free Fire", label: "Free Fire", icon: "🔥" },
   { v: "Mobile Legends", label: "Mobile Legends", icon: "⚔️" },
   { v: "Rental", label: "Rental", icon: "🎮" },
@@ -27,16 +26,16 @@ const formatIDR = (n: number) =>
 
 function AdminDashboard() {
   const { products, loading, refetch } = useProducts();
-  const [category, setCategory] = useState<"all" | GameType>("all");
+  const [category, setCategory] = useState<GameType>("Free Fire");
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const filtered = useMemo(
-    () => (category === "all" ? products : products.filter((p) => p.game === category)),
+    () => products.filter((p) => p.game === category),
     [products, category],
   );
 
   const counts = useMemo(() => {
-    const map: Record<string, number> = { all: products.length };
+    const map: Record<string, number> = {};
     products.forEach((p) => {
       map[p.game] = (map[p.game] ?? 0) + 1;
     });
