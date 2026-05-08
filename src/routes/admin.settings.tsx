@@ -10,6 +10,7 @@ export const Route = createFileRoute("/admin/settings")({
 function AdminSettings() {
   const { settings, loading, refetch } = useSiteSettings();
   const [waNumber, setWaNumber] = useState("");
+  const [waNumber2, setWaNumber2] = useState("");
   const [igUrl, setIgUrl] = useState("");
   const [tiktokUrl, setTiktokUrl] = useState("");
   const [waChannelUrl, setWaChannelUrl] = useState("");
@@ -19,21 +20,24 @@ function AdminSettings() {
   useEffect(() => {
     if (!loading) {
       setWaNumber(settings.whatsappNumber);
+      setWaNumber2(settings.whatsappNumber2);
       setIgUrl(settings.instagramUrl);
       setTiktokUrl(settings.tiktokUrl);
       setWaChannelUrl(settings.whatsappChannelUrl);
     }
-  }, [loading, settings.whatsappNumber, settings.instagramUrl, settings.tiktokUrl, settings.whatsappChannelUrl]);
+  }, [loading, settings.whatsappNumber, settings.whatsappNumber2, settings.instagramUrl, settings.tiktokUrl, settings.whatsappChannelUrl]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     setMsg(null);
     const cleanWa = waNumber.replace(/[^0-9]/g, "");
+    const cleanWa2 = waNumber2.replace(/[^0-9]/g, "");
     const { error } = await supabase
       .from("site_settings")
       .update({
         whatsapp_number: cleanWa,
+        whatsapp_number_2: cleanWa2,
         instagram_url: igUrl.trim(),
         tiktok_url: tiktokUrl.trim(),
         whatsapp_channel_url: waChannelUrl.trim(),
@@ -74,6 +78,22 @@ function AdminSettings() {
           />
           <p className="text-[11px] text-muted-foreground mt-1.5">
             Format internasional tanpa "+" atau spasi. Contoh: 6282312715218
+          </p>
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+            Nomor WhatsApp Admin 2 (Opsional)
+          </label>
+          <input
+            type="text"
+            value={waNumber2}
+            onChange={(e) => setWaNumber2(e.target.value.replace(/[^0-9]/g, ""))}
+            placeholder="62812xxxxxxx"
+            className="w-full px-4 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all text-sm"
+          />
+          <p className="text-[11px] text-muted-foreground mt-1.5">
+            Digunakan untuk CTA WhatsApp kedua di bagian Kontak. Kosongkan untuk menyembunyikan.
           </p>
         </div>
 
